@@ -1,0 +1,24 @@
+{
+  "name": "api-russell-express",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "env-cmd -f ../env/.env nodemon server.js",
+    "dev": "env-cmd -f ../env/.env.dev nodemon server.js",
+    "prod": "env-cmd -f ../env/.env.prod node server.js",
+    "test": "mocha --exit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "mongoose": "^9.1.2"
+  },
+  "devDependencies": {
+    "env-cmd": "^11.0.0",
+    "nodemon": "^3.1.11"
+  }
+}
