@@ -1,5 +1,5 @@
-const express = require('express');
-const connectToMongo = require('./db/mongo');
+import express from "express";
+import connectToMongo from "./db/mongo.js";
 
 const app = express();
 
