@@ -1,0 +1,26 @@
+//Middleware global de gestion des erreurs
+export const errorMiddleware = (err, req, res, next) => {
+  // Détecter si le client attend HTML ou JSON
+  const wantsHTML = req.headers.accept?.includes("text/html");
+
+  // Déterminer le code HTTP à renvoyer, par défaut 500
+  const statusCode = err.status || 500;
+
+  // Message d'erreur à envoyer
+  const message = err.message || "Une erreur est survenue";
+
+  if (wantsHTML) {
+    // Rend la page définie dans err.view si elle existe
+    return res.status(statusCode).render(err.view, {
+      errorMessage: message
+    });
+  }
+
+  // Rendu JSON pour tests
+  return res.status(statusCode).json({
+    error: message,
+
+    //stack trace uniquement en développement pour faciliter le debug
+    ...(process.env.NODE_ENV === "development" && { stack: err.stack })
+  });
+};
