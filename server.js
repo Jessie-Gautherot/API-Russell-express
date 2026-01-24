@@ -1,5 +1,8 @@
 import express from "express";
 import connectToMongo from "./db/mongo.js";
+import authRoutes from "./src/routes/authRoutes.js";
+import userRoutes from "./src/routes/userRoutes.js";
+import { errorMiddleware } from "./src/middlewares/errorMiddleware.js";
 
 const app = express();
 
@@ -10,10 +13,17 @@ const ENV = process.env.NODE_ENV || 'default';
 // Middleware pour parser le JSON
 app.use(express.json());
 
+// Routes API
+app.use(authRoutes);
+app.use(userRoutes);
+
 // Route de test / accueil
 app.get('/', (req, res) => {
   res.send('Hello world!!!!!!');
 });
+
+// Middleware global de gestion des erreurs (TOUJOURS À LA FIN)
+app.use(errorMiddleware);
 
 // Fonction pour démarrer le serveur après connexion Mongo
 const startServer = async () => {
