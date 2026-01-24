@@ -1,4 +1,11 @@
-//Middleware global de gestion des erreurs
+/**
+ * Middleware global de gestion des erreurs.
+ * @param {import("express").ErrorRequestHandler & {status?: number, view?: string}} err - Objet erreur
+ * @param {import("express").Request} req - Requête Express
+ * @param {import("express").Response} res - Réponse Express
+ * @param {import("express").NextFunction} next - Fonction Express suivante
+ * @returns {void}
+ */
 export const errorMiddleware = (err, req, res, next) => {
   // Détecter si le client attend HTML ou JSON
   const wantsHTML = req.headers.accept?.includes("text/html");

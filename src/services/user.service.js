@@ -1,6 +1,21 @@
 import User from "../models/user.js";
 
-//Créer un utilisateur
+/**
+ * @typedef {Object} UserData
+ * @property {string} name - Nom complet de l'utilisateur
+ * @property {string} email - Email de l'utilisateur
+ * @property {string} password - Mot de passe de l'utilisateur
+ */
+
+/**
+ * Crée un nouvel utilisateur dans la base de données.
+ *
+ * @async
+ * @param {UserData} userData - Données de l'utilisateur
+ * @returns {Promise<User>} L'utilisateur créé
+ * @throws {Error} Si des champs obligatoires sont manquants, email invalide ou déjà utilisé
+ */
+
 export const createUser = async ({ name, email, password }) => {
   if (!name || !email || !password) {
     throw new Error("Tous les champs sont obligatoires");
@@ -28,7 +43,16 @@ export const createUser = async ({ name, email, password }) => {
   return await user.save();
 };
 
-// Authentifier un utilisateur
+/**
+ * Authentifie un utilisateur avec email et mot de passe.
+ *
+ * @async
+ * @param {Object} credentials - Identifiants de l'utilisateur
+ * @param {string} credentials.email - Email de l'utilisateur
+ * @param {string} credentials.password - Mot de passe
+ * @returns {Promise<User>} L'utilisateur authentifié
+ * @throws {Error} Si email ou mot de passe incorrect
+ */
 export const authenticateUser = async ({ email, password }) => {
   if (!email || !password) {
     throw new Error("Email et mot de passe requis");
@@ -43,14 +67,29 @@ export const authenticateUser = async ({ email, password }) => {
   return user;
 };
 
-//Récupérer un utilisateur par ID
+/**
+ * Récupère un utilisateur par son ID.
+ *
+ * @async
+ * @param {string} id - ID MongoDB de l'utilisateur
+ * @returns {Promise<User>} L'utilisateur trouvé
+ * @throws {Error} Si aucun utilisateur trouvé
+ */
 export const getUserById = async (id) => {
   const user = await User.findById(id);
   if (!user) throw new Error("Utilisateur non trouvé");
   return user;
 };
 
-// Mettre à jour un utilisateur
+/**
+ * Met à jour un utilisateur existant.
+ *
+ * @async
+ * @param {string} id - ID MongoDB de l'utilisateur
+ * @param {Partial<UserData>} data - Données à mettre à jour (au moins un champ)
+ * @returns {Promise<User>} L'utilisateur mis à jour
+ * @throws {Error} Si utilisateur non trouvé
+ */
 export const updateUser = async (id, data) => {
   const user = await User.findById(id);
   if (!user) throw new Error("Utilisateur non trouvé");
@@ -62,7 +101,14 @@ export const updateUser = async (id, data) => {
   return await user.save();
 };
 
-//Supprimer un utilisateur
+/**
+ * Supprime un utilisateur.
+ *
+ * @async
+ * @param {string} id - ID MongoDB de l'utilisateur
+ * @returns {Promise<User>} L'utilisateur supprimé
+ * @throws {Error} Si utilisateur non trouvé
+ */
 export const deleteUser = async (id) => {
   const user = await User.findByIdAndDelete(id);
   if (!user) throw new Error("Utilisateur non trouvé");
