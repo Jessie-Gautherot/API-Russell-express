@@ -7,7 +7,7 @@
     "start": "env-cmd -f ./env/.env nodemon server.js",
     "dev": "env-cmd -f ./env/.env.dev nodemon server.js",
     "prod": "env-cmd -f ./env/.env.prod node server.js",
-    "test": "env-cmd -f ./env/.env.dev MOCHA=true mocha --exit",
+    "test": "cross-env MOCHA=true env-cmd -f ./env/.env.dev mocha --exit",
     "doc": "jsdoc -c jsdoc.json"
   },
   "keywords": [],
@@ -24,9 +24,11 @@
   "devDependencies": {
     "chai": "^6.2.2",
     "chai-http": "^5.1.2",
+    "cross-env": "^10.1.0",
     "env-cmd": "^11.0.0",
     "jsdoc": "^4.0.5",
     "mocha": "^11.7.5",
-    "nodemon": "^3.1.11"
+    "nodemon": "^3.1.11",
+    "supertest": "^7.2.2"
   }
 }

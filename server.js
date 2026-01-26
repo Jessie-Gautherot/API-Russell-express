@@ -26,7 +26,7 @@ const startServer = async () => {
       console.log("Mode test : serveur non lancé, prêt pour Mocha/Chai-HTTP");
     }
    } catch (error) {
-    console.error("Impossible de démarrer le serveur : Mongo non connecté", error);
+    console.error("Impossible de démarrer le serveur", error);
     process.exit(1); // Stop le process si la DB n'est pas connectée
   }
 };
