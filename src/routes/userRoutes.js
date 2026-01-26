@@ -4,8 +4,8 @@ import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-// Créer un utilisateur
-router.post("/users", createUserController);
+// Créer un utilisateur (protégé)
+router.post("/users", authMiddleware, createUserController);
 
 // Récupérer un utilisateur par ID (protégé)
 router.get("/users/:id", authMiddleware, getUserController);
