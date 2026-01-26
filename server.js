@@ -1,60 +1,41 @@
-import express from "express";
+import app from "./src/app.js";
 import connectToMongo from "./db/mongo.js";
-import authRoutes from "./src/routes/authRoutes.js";
-import userRoutes from "./src/routes/userRoutes.js";
-import { errorMiddleware } from "./src/middlewares/errorMiddleware.js";
 
-const app = express();
-
-// Récupération des variables d'environnement
 const PORT = process.env.PORT || 3000;
-const ENV = process.env.NODE_ENV || 'default';
+const ENV = process.env.NODE_ENV || "default";
+const IS_TEST = process.env.MOCHA === "true"; // vrai si on lance "npm test"
 
-// Middleware pour parser le JSON
-app.use(express.json());
-
-// Routes API
-app.use(authRoutes);
-app.use(userRoutes);
-
-// Route de test / accueil
-app.get('/', (req, res) => {
-  res.send('Hello world!!!!!!');
-});
-
-// Middleware global de gestion des erreurs (TOUJOURS À LA FIN)
-app.use(errorMiddleware);
-
-// Fonction pour démarrer le serveur après connexion Mongo
 const startServer = async () => {
-  console.log('Démarrage du serveur… connexion à MongoDB en cours');
+  console.log(`Démarrage du serveur (env: ${ENV})`);
+
+
   try {
     await connectToMongo();
-    console.log('Connexion MongoDB OK');
+    console.log(`MongoDB connecté (env: ${ENV})`);
 
-    app.listen(PORT, () => {
-      if (ENV === 'production') {
-        console.log(`Server running in PROD on port ${PORT}`);
-      } else if (ENV === 'development') {
-        console.log(`Server running in DEV on http://localhost:${PORT}`);
-      } else {
-        console.log(`Server running on port ${PORT} (default env)`);
-      }
-    });
-
-  } catch (error) {
-    console.error('Impossible de démarrer le serveur : Mongo non connecté');
-    console.error(error);
-    process.exit(1); // Stoppe Node si Mongo échoue
+    // Lancer le serveur seulement si on n'est pas en test
+    if (!IS_TEST) {
+      app.listen(PORT, () => {
+        if (ENV === "production") {
+          console.log(`Server running in PROD on port ${PORT}`);
+        } else {
+          console.log(`Server running in DEV sur http://localhost:${PORT}`);
+        }
+      });
+    } else {
+      console.log("Mode test : serveur non lancé, prêt pour Mocha/Chai-HTTP");
+    }
+   } catch (error) {
+    console.error("Impossible de démarrer le serveur : Mongo non connecté", error);
+    process.exit(1); // Stop le process si la DB n'est pas connectée
   }
 };
 
-// En dev, on peut afficher un log tout de suite pour Nodemon
-if (ENV === 'development') {
-  console.log('Mode DEV activé');
-}
-
 // Démarrage du serveur
 startServer();
+
+// Export de l'instance Express pour les tests
+export default app;
+
 
 
