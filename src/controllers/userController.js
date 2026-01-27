@@ -5,26 +5,26 @@ import { sendResponse, sanitizeUser } from "../utils/response.js";
 const JWT_SECRET = process.env.JWT_SECRET;
 
 /**
- * @typedef {Object} UserData
- * @property {string} name - Nom complet de l'utilisateur
- * @property {string} email - Email de l'utilisateur
- * @property {string} password - Mot de passe de l'utilisateur
- */
+ * @typedef {Object} UserData
+ * @property {string} name - Nom complet de l'utilisateur
+ * @property {string} email - Email de l'utilisateur
+ * @property {string} password - Mot de passe de l'utilisateur
+ */
 
 /**
- * Crée un nouvel utilisateur.
- *
- * @async
- * @param {import("express").Request} req - Requête Express contenant les données de l'utilisateur dans req.body
- * @param {import("express").Response} res - Réponse Express
- * @param {import("express").NextFunction} next - Fonction pour passer au middleware suivant
- * @returns {Promise<void>}
- */
+ * Crée un nouvel utilisateur.
+ *
+ * @async
+ * @param {import("express").Request} req - Requête Express contenant les données de l'utilisateur dans req.body
+ * @param {import("express").Response} res - Réponse Express
+ * @param {import("express").NextFunction} next - Fonction pour passer au middleware suivant
+ * @returns {Promise<void>}
+ */
 export const createUserController = async (req, res, next) => {
-  try {
-    const user = await createUser(req.body);
-
-    sendResponse(req, res, {
+   try {
+     const user = await createUser(req.body);
+ 
+     sendResponse(req, res, {
       data: { user: sanitizeUser(user) },
       message: "Utilisateur créé",
       status: 201,
@@ -37,14 +37,14 @@ export const createUserController = async (req, res, next) => {
 };
 
 /**
- * Authentifie un utilisateur et génère un token JWT.
- *
- * @async
- * @param {import("express").Request} req - Requête Express contenant email et password dans req.body
- * @param {import("express").Response} res - Réponse Express
- * @param {import("express").NextFunction} next - Fonction pour passer au middleware suivant
- * @returns {Promise<void>}
- */
+ * Authentifie un utilisateur et génère un token JWT.
+ *
+ * @async
+ * @param {import("express").Request} req - Requête Express contenant email et password dans req.body
+ * @param {import("express").Response} res - Réponse Express
+ * @param {import("express").NextFunction} next - Fonction pour passer au middleware suivant
+ * @returns {Promise<void>}
+ */
 export const loginUserController = async (req, res, next) => {
   try {
     const user = await authenticateUser(req.body);
@@ -62,14 +62,14 @@ export const loginUserController = async (req, res, next) => {
 };
 
 /**
- * Récupère un utilisateur par son ID.
- *
- * @async
- * @param {import("express").Request} req - Requête Express avec req.params.id
- * @param {import("express").Response} res - Réponse Express
- * @param {import("express").NextFunction} next - Fonction pour passer au middleware suivant
- * @returns {Promise<void>}
- */
+ * Récupère un utilisateur par son ID.
+ *
+ * @async
+ * @param {import("express").Request} req - Requête Express avec req.params.id
+ * @param {import("express").Response} res - Réponse Express
+ * @param {import("express").NextFunction} next - Fonction pour passer au middleware suivant
+ * @returns {Promise<void>}
+ */
 export const getUserController = async (req, res, next) => {
   try {
     const user = await getUserById(req.params.id);
@@ -84,16 +84,16 @@ export const getUserController = async (req, res, next) => {
 };
 
 /**
- * Met à jour un utilisateur existant.
- *
- * @async
- * @param {import("express").Request} req - Requête Express avec req.params.id et req.body
- * @param {import("express").Response} res - Réponse Express
- * @param {import("express").NextFunction} next - Fonction pour passer au middleware suivant
- * @returns {Promise<void>}
- */
+ * Met à jour un utilisateur existant.
+ *
+ * @async
+ * @param {import("express").Request} req - Requête Express avec req.params.id et req.body
+ * @param {import("express").Response} res - Réponse Express
+ * @param {import("express").NextFunction} next - Fonction pour passer au middleware suivant
+ * @returns {Promise<void>}
+ */
 export const updateUserController = async (req, res, next) => {
-  try {
+ try {
     const user = await updateUser(req.params.id, req.body);
 
     sendResponse(req, res, {
@@ -108,14 +108,14 @@ export const updateUserController = async (req, res, next) => {
 };
 
 /**
- * Supprime un utilisateur existant.
- *
- * @async
- * @param {import("express").Request} req - Requête Express avec req.params.id
- * @param {import("express").Response} res - Réponse Express
- * @param {import("express").NextFunction} next - Fonction pour passer au middleware suivant
- * @returns {Promise<void>}
- */
+ * Supprime un utilisateur existant.
+ *
+ * @async
+ * @param {import("express").Request} req - Requête Express avec req.params.id
+ * @param {import("express").Response} res - Réponse Express
+ * @param {import("express").NextFunction} next - Fonction pour passer au middleware suivant
+ * @returns {Promise<void>}
+ */
 export const deleteUserController = async (req, res, next) => {
   try {
     const user = await deleteUser(req.params.id);
