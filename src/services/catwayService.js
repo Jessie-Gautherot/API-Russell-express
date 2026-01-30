@@ -52,7 +52,12 @@ export const getAllCatways = async () => {
  */
 export const getCatwayById = async (id) => {
   const catway = await Catway.findById(id);
-  if (!catway) throw new Error("Catway non trouvé");
+  if (!catway) {
+    const err = new Error("Catway non trouvé");
+    err.status = 404;
+    throw err;
+  }
+
   return catway;
 };
 
@@ -71,8 +76,11 @@ export const getCatwayById = async (id) => {
  */
 export const updateCatway = async (id, data) => {
   const catway = await Catway.findById(id);
-  if (!catway) throw new Error("Catway non trouvé");
-
+  if (!catway) {
+    const err = new Error("Catway non trouvé");
+    err.status = 404;
+    throw err;
+  }
   // Vérifier et mettre à jour catwayNumber
   if ("catwayNumber" in data && data.catwayNumber != null) {
     // Si le numéro est différent de l'actuel, vérifier unicité
@@ -113,7 +121,11 @@ export const patchCatwayState = async (id, catwayState) => {
   if (!catwayState) throw new Error("Le champ catwayState est requis");
 
   const catway = await Catway.findById(id);
-  if (!catway) throw new Error("Catway non trouvé");
+  if (!catway) {
+    const err = new Error("Catway non trouvé");
+    err.status = 404;
+    throw err;
+  }
 
   catway.catwayState = catwayState;
   return await catway.save();
@@ -129,6 +141,11 @@ export const patchCatwayState = async (id, catwayState) => {
  */
 export const deleteCatway = async (id) => {
   const catway = await Catway.findByIdAndDelete(id);
-  if (!catway) throw new Error("Catway non trouvé");
+  if (!catway) {
+    const err = new Error("Catway non trouvé");
+    err.status = 404;
+    throw err;
+  }
+
   return catway;
 };

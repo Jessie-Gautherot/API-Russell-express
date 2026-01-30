@@ -2,6 +2,7 @@ import express from "express";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import catwayRoutes from "./routes/catwayRoutes.js"
+import reservationRoutes from "./routes/reservationRoutes.js"
 import { errorMiddleware } from "./middlewares/errorMiddleware.js";
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(authRoutes);
 app.use(userRoutes);
 app.use(catwayRoutes);
+app.use(reservationRoutes);
 
 // Route /accueil
 app.get("/", (req, res) => {

@@ -142,7 +142,7 @@ describe("Catway Tests", function () {
       .set("Authorization", `Bearer ${adminToken}`)
       .set("Accept", "application/json");
 
-    expect(res.status).to.equal(500);
+    expect(res.status).to.equal(404);
     expect(res.body).to.have.property("error").that.includes("Catway non trouvé");
   });
 });

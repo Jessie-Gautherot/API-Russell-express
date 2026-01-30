@@ -111,7 +111,7 @@ describe("User Tests", function () {
       .get(`/users/${testUserId}`)
       .set("Authorization", `Bearer ${testUser.token}`);
 
-    expect(res.status).to.equal(500); 
+    expect(res.status).to.equal(404); 
     expect(res.body).to.have.property("error").that.includes("Utilisateur non trouvé");
   });
-});expect(res.status).to.equal(500);
+});expect(res.status).to.equal(404);

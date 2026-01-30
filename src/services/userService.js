@@ -77,7 +77,12 @@ export const authenticateUser = async ({ email, password }) => {
  */
 export const getUserById = async (id) => {
   const user = await User.findById(id);
-  if (!user) throw new Error("Utilisateur non trouvé");
+  if (!user) {
+    const err = new Error("Utilisateur non trouvé");
+    err.status = 404;
+    throw err;
+  }
+
   return user;
 };
 
@@ -92,8 +97,11 @@ export const getUserById = async (id) => {
  */
 export const updateUser = async (id, data) => {
   const user = await User.findById(id);
-  if (!user) throw new Error("Utilisateur non trouvé");
-
+  if (!user) {
+    const err = new Error("Utilisateur non trouvé");
+    err.status = 404;
+    throw err;
+  }
   if (data.name) user.name = data.name;
   if (data.email) user.email = data.email;
   if (data.password) user.password = data.password; // hash automatique dans le model
@@ -111,6 +119,11 @@ export const updateUser = async (id, data) => {
  */
 export const deleteUser = async (id) => {
   const user = await User.findByIdAndDelete(id);
-  if (!user) throw new Error("Utilisateur non trouvé");
+  if (!user) {
+    const err = new Error("Utilisateur non trouvé");
+    err.status = 404;
+    throw err;
+  }
+
   return user;
 };
