@@ -9,21 +9,22 @@
 export const errorMiddleware = (err, req, res, next) => {
   // Détecter si le client attend HTML ou JSON
   const wantsHTML = req.headers.accept?.includes("text/html");
-
   // Déterminer le code HTTP à renvoyer, par défaut 500
   const statusCode = err.status || 500;
-
   // Message d'erreur à envoyer
   const message = err.message || "Une erreur est survenue";
 
+  //Réponse HTML
   if (wantsHTML) {
-    // Rend la page définie dans err.view si elle existe
-    return res.status(statusCode).render(err.view, {
+    // vue définie par le controller, sinon fallback
+    const view = req.renderContext?.view || "home";
+
+    return res.status(statusCode).render(view, {
       errorMessage: message
     });
   }
 
-  // Rendu JSON pour tests
+  // Réponse JSON pour tests
   return res.status(statusCode).json({
     error: message,
 

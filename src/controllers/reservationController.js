@@ -1,9 +1,17 @@
 import {createReservation, getAllReservations, getReservationById, getReservationsByCatway, deleteReservation} from "../services/reservationService.js";
-import { sendResponse } from "../utils/response.js";
+
 
 /**
  * Crée une réservation pour un catway 
  * (POST /catways/:catwayId/reservations)
+ *
+ * @async
+ * @param {import("express").Request} req - Requête Express
+ *   @property {string} req.params.catwayId - ID du catway
+ *   @property {Object} req.body - Données de la réservation
+ * @param {import("express").Response} res - Réponse Express
+ * @param {import("express").NextFunction} next - Middleware pour erreurs
+ * @returns {Promise<void>} Envoie de la réservation ou du message de succès 
  */
 export const createReservationController = async (req, res, next) => {
   try {
@@ -12,14 +20,21 @@ export const createReservationController = async (req, res, next) => {
 
     const reservation = await createReservation(catwayId, reservationData);
 
-    sendResponse(req, res, {
-      data: { reservation },
-      status: 201,
-      message: "Réservation créée",
-      view: "dashboard"
+    // succès JSON pour tests automatisés
+    if (req.accepts("json")) {
+      return res.status(201).json({
+        message: "Réservation créée",
+        reservation
+      });
+    }
+
+    // succès HTML, rendu EJS pour l'utilisateur final
+    res.render("dashboard", { 
+      successMessage: "Réservation créée" 
     });
   } catch (error) {
-    error.view = "dashboard";
+    // Si erreur : déléguer au middleware et indiquer la vue HTML
+    req.renderContext = { view: "dashboard" };
     next(error);
   }
 };
@@ -27,30 +42,42 @@ export const createReservationController = async (req, res, next) => {
 /**
  * Récupère la liste de toutes les réservations existantes
  * (GET /reservations)
+ *
+ * @async
+ * @param {import("express").Request} req - Requête Express
+ * @param {import("express").Response} res - Réponse Express
+ * @param {import("express").NextFunction} next - Middleware pour erreurs
+ * @returns {Promise<void>} Envoie la liste de toutes les réservations en JSON ou HTML
  */
 export const getAllReservationsController = async (req, res, next) => {
   try {
     const reservations = await getAllReservations();
-    sendResponse(req, res, {
-      data: { reservations },
-      status: 200,
-      view: "dashboard"
-    });
+    
+    // succès JSON pour tests automatisés
+    if (req.accepts("json")) {
+      return res.json({ reservations });
+    }
+
+    // succès HTML, rendu EJS pour l'utilisateur final
+    res.render("dashboard", { reservations });
   } catch (error) {
-    error.view = "dashboard";
+    // Si erreur : déléguer au middleware et indiquer la vue HTML
+    req.renderContext = { view: "dashboard" };
     next(error);
   }
 };
 
 /**
  * Récupère le détail d’une réservation à partir de son ID
- * Route : GET /catways/:catwayId/reservations/:idReservation
+ * (GET /catways/:catwayId/reservations/:idReservation)
  *
  * @async
- * @param {Object} req - Objet requête Express
- * @param {Object} res - Objet réponse Express
- * @param {Function} next - Fonction next() pour gérer les erreurs
- * @returns {Promise<void>} Envoie la réservation demandée
+ * @param {import("express").Request} req - Requête Express
+ *   @property {string} req.params.catwayId - ID du catway
+ *   @property {string} req.params.idReservation - ID de la réservation
+ * @param {import("express").Response} res - Réponse Express
+ * @param {import("express").NextFunction} next - Middleware pour erreurs
+ * @returns {Promise<void>} Envoie la réservation demandée en JSON ou HTML
  */
 export const getReservationByIdController = async (req, res, next) => {
   try {
@@ -59,57 +86,80 @@ export const getReservationByIdController = async (req, res, next) => {
     // Appelle le service correspondant
     const reservation = await getReservationById(catwayId, idReservation);
 
-    sendResponse(req, res, {
-      data: { reservation },
-      view: "dashboard"
-    });
+    // succès JSON pour tests automatisés
+    if (req.accepts("json")) {
+      return res.json({ reservation });
+    }
+
+    // succès HTML, rendu EJS pour l'utilisateur final
+    res.render("dashboard", { reservation });
   } catch (error) {
-    error.view = "dashboard";
+    // Si erreur : déléguer au middleware et indiquer la vue HTML
+    req.renderContext = { view: "dashboard" };
     next(error);
   }
 };
 
-//// route demandée, mais pas fonctionnalité
+// route demandée, mais pas fonctionnalité
 /**
- * Récupère et liste toutes les réservations d’un catway spécifique via son ID
- * Route : GET /catways/:catwayId/reservations
+ * Récupère toutes les réservations d’un catway spécifique
+ * (GET /catways/:catwayId/reservations)
  *
  * @async
- * @param {Object} req - Objet requête Express
- * @param {Object} res - Objet réponse Express
- * @param {Function} next - Fonction next() pour gérer les erreurs
- * @returns {Promise<void>} Envoie la liste des réservations du catway
+ * @param {import("express").Request} req - Requête Express
+ *   @property {string} req.params.catwayId - ID du catway
+ * @param {import("express").Response} res - Réponse Express
+ * @param {import("express").NextFunction} next - Middleware pour erreurs
+ * @returns {Promise<void>} Envoie les réservations du catway en JSON ou HTML
  */
 export const getReservationsByCatwayController = async (req, res, next) => {
   try {
     const { catwayId } = req.params;
     const reservations = await getReservationsByCatway(catwayId);
 
-    sendResponse(req, res, { 
-      data: { reservations }, 
-      view: "dashboard" 
-    });
+    // succès JSON pour tests automatisés
+    if (req.accepts("json")) {
+      return res.json({ reservations });
+    }
+
+    // succès HTML, rendu EJS pour l'utilisateur final
+    res.render("dashboard", { reservations });
   } catch (error) {
-    error.view = "dashboard";
+    // Si erreur : déléguer au middleware et indiquer la vue HTML
+    req.renderContext = { view: "dashboard" };
     next(error);
   }
 };
 
 /**
- * Supprime une réservation par son ID 
+ * Supprime une réservation par son ID
  * (DELETE /catways/:catwayId/reservations/:idReservation)
+ *
+ * @async
+ * @param {import("express").Request} req - Requête Express
+ *   @property {string} req.params.idReservation - ID de la réservation
+ * @param {import("express").Response} res - Réponse Express
+ * @param {import("express").NextFunction} next - Middleware pour erreurs
+ * @returns {Promise<void>} Envoie la réservation supprimée en JSON ou HTML
  */
 export const deleteReservationController = async (req, res, next) => {
   try {
     const { idReservation } = req.params;
     const reservation = await deleteReservation(idReservation);
-    sendResponse(req, res, {
-      data: { reservation },
-      message: "Réservation supprimée",
-      view: "dashboard"
-    });
+     
+    // succès JSON pour tests automatisés
+    if (req.accepts("json")) {
+      return res.json({
+        message: "Réservation supprimée",
+        reservation
+      });
+    }
+
+    // succès HTML, rendu EJS pour l'utilisateur final
+    res.render("dashboard", { successMessage: "Réservation supprimée" });
   } catch (error) {
-    error.view = "dashboard";
+    // Si erreur : déléguer au middleware et indiquer la vue HTML
+    req.renderContext = { view: "dashboard" };
     next(error);
   }
 };

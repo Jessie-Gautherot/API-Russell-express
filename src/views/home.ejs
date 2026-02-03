@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Accueil</title>
+</head>
+<body>
+   <header>
+    <h1>PORT DE PLAISANCE RUSSELL</h1>
+  </header>
+   <main>
+      <!-- présentaion -->
+      <h2>Bienvenue ! Gérez vos catways et réservations facilement grâce à notre API privée.</h2>
+    <section class="login-form">
+       <!-- Authentification-->
+      <h3>Connexion</h3>
+     <% if (errorMessage) { %>
+  <p class="error"><%= errorMessage %></p>
+<% } %>
+
+      <form action="/auth/login" method="POST">
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="password" name="password" placeholder="Mot de passe" required />
+        <button type="submit">Se connecter</button>
+      </form>
+       <!-- Lien vers la documentation -->
+      <p>Pour voir la documentation de l'API : <a href="/documentation">Cliquez ici</a></p>
+    </section>
+  </main>
+  </div>
+</body>
+</html>
