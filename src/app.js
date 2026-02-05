@@ -20,6 +20,9 @@ app.use(express.json());
 // Pour formulaire html
 app.use(express.urlencoded({ extended: true }));
 
+app.use(express.static(path.join(__dirname, 'public')));
+
+
 // Routes views EJS
 app.use(viewRoutes);
 // Routes API

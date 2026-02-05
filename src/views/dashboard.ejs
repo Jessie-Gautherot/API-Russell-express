@@ -1,0 +1,92 @@
+<%- include("partials/header") %>
+
+<h1>Bienvenue sur le Dashboard</h1>
+
+<section id="users-section">
+  <h2>Gestion des utilisateurs</h2>
+
+  <!-- Création utilisateur -->
+  <details>
+    <summary>Créer un nouvel utilisateur</summary>
+    <form id="create-user-form" action="/users" method="POST">
+      <input type="text" name="name" placeholder="Nom" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="password" name="password" placeholder="Mot de passe" required />
+      <button type="submit">Créer</button>
+    </form>
+  </details>
+
+  <!-- Gestion des utilisateurs -->
+   <details>
+  <summary>Modifier ou supprimer un utilisateur</summary>
+
+    <!-- Table des utilisateurs -->
+    <table id="users-table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(user => { %>
+          <tr>
+            <td><%= user.name %></td>
+            <td><%= user.email %></td>
+            <td>
+              <button type="button" class="edit-btn" 
+                      data-id="<%= user._id %>" 
+                      data-name="<%= user.name %>" 
+                      data-email="<%= user.email %>">Modifier</button>
+              <button type="button" class="delete-btn" 
+                      data-id="<%= user._id %>" data-name="<%= user.name %>">Supprimer</button>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <!-- Formulaire de modification (caché par défaut) -->
+  <section id="update-section" style="display:none; margin-top:20px; padding:15px; background:#f9f9f9;">
+    <h3>Modifier un utilisateur</h3>
+    <form id="update-user-form" method="POST">
+      <input type="hidden" name="_method" value="PUT" />
+      <input type="hidden" name="id" />
+      <div>
+  <label for="update-name">Nouveau nom</label>
+  <input type="text" id="update-name" name="name" placeholder="Nouveau nom" />
+</div>
+
+      <div>
+      <label for="update-email">Nouvelle adresse Email</label>
+      <input type="email" id="update-email" name="email" placeholder="Nouvel email" required />
+    </div>
+        <div>
+      <label for="update-password">nouveau mot de passe</label>
+      <input type="password" id="update-password" name="password" placeholder="Nouveau mot de passe" />
+    </div>
+      <button type="submit">Modifier</button>
+      <button type="button" class="cancel-btn">Annuler</button>
+    </form>
+  </section>
+
+  <!-- Formulaire de suppression (caché par défaut) -->
+  <section id="delete-section" style="display:none; margin-top:20px; padding:15px; border:1px solid #f7a29c; border-radius:8px; background:#ffe6e6;">
+    <h3>Supprimer un utilisateur</h3>
+    <form id="delete-user-form" method="POST">
+      <input type="hidden" name="_method" value="DELETE" />
+      <input type="hidden" name="id" />
+      <p>
+  Confirmer la suppression de cet utilisateur : <strong id="delete-user-name"></strong>.
+</p>
+      <button type="submit">Supprimer</button>
+      <button type="button" class="cancel-btn">Annuler</button>
+    </form>
+  </section>
+  </details>
+
+</section>
+
+<script src="/js/users.js"></script>
+<%- include("partials/footer") %>

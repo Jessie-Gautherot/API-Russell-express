@@ -69,8 +69,10 @@ export const loginUserController = async (req, res, next) => {
       sameSite: "Strict"
     });
 
-    // succès json 
-    if (req.accepts("json")) {
+    // Détection type de requête
+    const isAPIRequest = req.headers["content-type"]?.includes("application/json");
+
+    if (isAPIRequest) {
       return res.json({
         message: "connexion réussie",
         user: sanitizeUser(user),
@@ -79,7 +81,7 @@ export const loginUserController = async (req, res, next) => {
     }
 
     // succès html : redirection vers le dashboard
-    res.redirect("/dashboard");
+    return res.redirect("/dashboard");
   } catch (error) {
     // Si erreur : Déléguer au middleware et indiquer la vue html à utiliser
     req.renderContext = { view: "home" };

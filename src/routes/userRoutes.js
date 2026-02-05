@@ -1,14 +1,17 @@
 import express from "express";
-import {createUserController, getUserController, updateUserController,deleteUserController} from "../controllers/userController.js";
+import {createUserController, loginUserController, getUserController, updateUserController,deleteUserController} from "../controllers/userController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
+// Route publique pour se connecter
+router.post("/users/login", loginUserController);
+
 // Créer un utilisateur (protégé)
 router.post("/users", authMiddleware, createUserController);
 
-// Récupérer un utilisateur par ID (protégé)
-router.get("/users/:id", authMiddleware, getUserController);
+// Récupérer un utilisateur par ID 
+router.get("/users/:id", getUserController);
 
 // Mettre à jour un utilisateur (protégé)
 router.put("/users/:id", authMiddleware, updateUserController);

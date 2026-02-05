@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Port de plaisance Russell</title>
+</head>
+<body>
+
+<header>
+  <h1>PORT DE PLAISANCE RUSSELL</h1>
+</header>
+
+<%
+// Sécurisation : si errorMessage n’existe pas, on le met à null
+if (typeof errorMessage === "undefined") {
+  errorMessage = null;
+}
+%>
+
+<% if (errorMessage) { %>
+  <p class="error"><%= errorMessage %></p>
+<% } %>
+
+<main>
