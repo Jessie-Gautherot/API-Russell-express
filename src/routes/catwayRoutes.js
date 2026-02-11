@@ -1,5 +1,5 @@
 import express from "express";
-import {createCatwayController, getAllCatwaysController, getCatwayByIdController, updateCatwayController, patchCatwayStateController, deleteCatwayController} from "../controllers/catwayController.js";
+import {createCatwayController, getAllCatwaysController, getCatwayByIdController, updateCatwayByIdController, patchCatwayStateController, deleteCatwayController} from "../controllers/catwayController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
@@ -14,7 +14,7 @@ router.get("/catways/:id", authMiddleware, getCatwayByIdController);
 router.post("/catways", authMiddleware, createCatwayController);
 
 // Mise à jour total du catway (protégé)
-router.put("/catways/:id", authMiddleware, updateCatwayController);
+router.put("/catways/:id", authMiddleware, updateCatwayByIdController);
 
 // Mise à jour de l'état d'un catway (protégé)
 router.patch("/catways/:id", authMiddleware, patchCatwayStateController);

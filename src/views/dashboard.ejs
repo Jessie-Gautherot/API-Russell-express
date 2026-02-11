@@ -8,18 +8,18 @@
   <!-- Formulaire création utilisateur -->
   <details>
     <summary>Créer un nouvel utilisateur</summary>
-    <form id="create-user-form">
+    <form id="create-user-form"autocomplete="off">
       <div>
         <label for="name">Nom :</label>
         <input type="text" id="name" name="name" placeholder="Nom" required />
       </div>
       <div>
         <label for="email">Email :</label>
-        <input type="email" id="email" name="email" placeholder="Email" required />
+        <input type="email" id="email" name="email" placeholder="Email" required autocomplete="off"/>
       </div>
       <div>
         <label for="password">Mot de passe :</label>
-        <input type="password" id="password" name="password" placeholder="Mot de passe" required />
+        <input type="password" id="password" name="password" placeholder="Mot de passe" required autocomplete="new-password" />
       </div>
       <button type="submit">Créer</button>
     </form>
@@ -90,33 +90,39 @@
   </details>
 </section>
 
-<script src="/js/users.js"></script>
-
-
-<!-- GESTION DES CATWAYS-->
+<!-- GESTION DES CATWAYS -->
 <section id="catways-section">
   <h2>Gestion des Catways</h2>
 
-  <!-- Formulaire création catway -->
+  <!-- FORMULAIRE CREATION CATWAY -->
   <details>
     <summary>Créer un nouveau Catway</summary>
-    <form id="create-catway-form" action="/catways" method="POST">
-      <input type="number" name="catwayNumber" placeholder="Numéro du catway" required />
-      <select name="type" required>
-        <option value="" disabled selected>Type</option>
-        <option value="long">Long</option>
-        <option value="short">Short</option>
-      </select>
-      <input type="text" name="catwayState" placeholder="État initial" required />
+    <form id="create-catway-form">
+      <div>
+        <label for="catwayNumber">Numéro :</label>
+        <input type="number" id="catwayNumber" name="catwayNumber" placeholder="Numéro du catway" required />
+      </div>
+      <div>
+        <label for="type">Type :</label>
+        <select id="type" name="type" required>
+          <option value="" disabled selected>Choisir un type</option>
+          <option value="long">Long</option>
+          <option value="short">Short</option>
+        </select>
+      </div>
+      <div>
+        <label for="catwayState">État :</label>
+        <input type="text" id="catwayState" name="catwayState" placeholder="État initial" required />
+      </div>
       <button type="submit">Créer</button>
     </form>
   </details>
 
-  <!-- Modifier / Supprimer / Voir détails -->
+  <!-- TABLEAU + FORMULAIRES DYNAMIQUES -->
   <details>
-    <summary>Modifier, supprimer ou voir un Catway</summary>
+    <summary>Supprimer, modifier ou voir un Catway</summary>
 
-    <!-- Table des catways existants -->
+    <!-- Tableau des Catways -->
     <table id="catways-table">
       <thead>
         <tr>
@@ -134,55 +140,50 @@
             <td><%= catway.catwayState %></td>
             <td>
               <button type="button" class="edit-catway-btn"
-                      data-id="<%= catway._id %>"
-                      data-number="<%= catway.catwayNumber %>"
-                      data-type="<%= catway.type %>"
-                      data-state="<%= catway.catwayState %>">Modifier</button>
+                data-id="<%= catway._id %>"
+                data-number="<%= catway.catwayNumber %>"
+                data-type="<%= catway.type %>"
+                data-state="<%= catway.catwayState %>">Modifier</button>
 
               <button type="button" class="delete-catway-btn"
-                      data-id="<%= catway._id %>"
-                      data-number="<%= catway.catwayNumber %>">Supprimer</button>
+                data-id="<%= catway._id %>"
+                data-number="<%= catway.catwayNumber %>">Supprimer</button>
 
               <button type="button" class="details-catway-btn"
-                      data-id="<%= catway._id %>"
-                      data-number="<%= catway.catwayNumber %>">Voir détails</button>
+                data-id="<%= catway._id %>"
+                data-number="<%= catway.catwayNumber %>">Voir détails</button>
             </td>
           </tr>
         <% }) %>
       </tbody>
     </table>
 
-    <!-- Formulaire modification d'un catway (caché par défaut) -->
-    <section id="update-catway-section" style="display:none; margin-top:20px; padding:15px; background:#f9f9f9;">
-      <h3>Modifier un Catway</h3>
-      <form id="update-catway-form" method="POST">
-        <input type="hidden" name="_method" value="PUT" />
+    <!-- formulaire modification de l'état d'un catway(caché par défaut) -->
+    <section id="update-catway-section" style="display:none; margin-top:20px; padding:15px; background:#f9f9f9; border-radius:8px;">
+      <h3>Modifier l'état d'un Catway</h3>
+      <form id="update-catway-form">
         <input type="hidden" name="id" />
         <div>
-          <label for="update-catway-number">Numéro</label>
-          <input type="number" id="update-catway-number" name="catwayNumber" />
+          <label for="update-catway-number">Numéro :</label>
+          <input type="number" id="update-catway-number" name="catwayNumber" readonly />
         </div>
         <div>
-          <label for="update-catway-type">Type</label>
-          <select id="update-catway-type" name="type">
-            <option value="long">Long</option>
-            <option value="short">Short</option>
-          </select>
+          <label for="update-catway-type">Type :</label>
+          <input type="text" id="update-catway-type" name="type" readonly />
         </div>
         <div>
-          <label for="update-catway-state">État</label>
-          <input type="text" id="update-catway-state" name="catwayState" />
+          <label for="update-catway-state">État :</label>
+          <input type="text" id="update-catway-state" name="catwayState" required />
         </div>
-        <button type="submit">Modifier</button>
+        <button type="submit">Modifier l'état</button>
         <button type="button" class="cancel-catway-btn">Annuler</button>
       </form>
     </section>
 
-    <!-- Formulaire suppression d'un catway (caché par défaut) -->
-    <section id="delete-catway-section" style="display:none; margin-top:20px; padding:15px; border:1px solid #f7a29c; border-radius:8px; background:#ffe6e6;">
+    <!-- FORMULAIRE SUPPRESSION (caché par défaut) -->
+    <section id="delete-catway-section" style="display:none; margin-top:20px; padding:15px; background:#ffe6e6; border:1px solid #f7a29c; border-radius:8px;">
       <h3>Supprimer un Catway</h3>
-      <form id="delete-catway-form" method="POST">
-        <input type="hidden" name="_method" value="DELETE" />
+      <form id="delete-catway-form">
         <input type="hidden" name="id" />
         <p>Confirmer la suppression du Catway : <strong id="delete-catway-number"></strong></p>
         <button type="submit">Supprimer</button>
@@ -190,29 +191,34 @@
       </form>
     </section>
 
-    <!-- Formulaire pour afficher la page de détails d'un catway(caché par défaut) -->
-   <section id="view-catway-section" style="display:none; margin-top:20px; padding:15px; background:#f0f8ff; border-radius:8px;">
-  <h3>Voir les détails du Catway</h3>
-  <form id="view-catway-form" method="GET">
-    <input type="hidden" name="id" />
-    <p>Catway numéro : <strong id="view-catway-number"></strong></p>
-    <button type="submit">Consulter les détails du catway </button>
-    <button type="button" id="cancel-view-catway-btn">Annuler</button>
-  </form>
-</section>
+    <!-- FORMULAIRE DETAILS (caché par défaut) -->
+    <section id="view-catway-section" style="display:none; margin-top:20px; padding:15px; background:#f0f8ff; border-radius:8px;">
+      <h3>Détails du Catway</h3>
+      <form id="view-catway-form">
+        <input type="hidden" name="id" />
+        <p>Catway numéro : <strong id="view-catway-number"></strong></p>
+        <button type="submit">Consulter la page du Catway</button>
+        <button type="button" id="cancel-view-catway-btn">Annuler</button>
+      </form>
+    </section>
+
   </details>
 
-  <!-- Lien vers liste complète des catways -->
+  <!-- Lien vers la liste complète -->
   <details>
-    <summary>Consulter la liste des Catways</summary>
-  <p><a href="/catways">Cliquer ici</a></p>
+    <summary>Consulter la liste complète des Catways</summary>
+    <p><a href="/catways">Cliquer ici pour voir tous les Catways</a></p>
   </details>
 </section>
 
-<script src="/js/catways.js"></script>
+
+
 
 <!-- GESTION RESERVATION-->
 <section id="reservation-section">
   <h2>Gestion des réservations</h2>
+
+  <script src="/js/users.js"></script>
+  <script src="/js/catways.js"></script>
 
 <%- include("partials/footer") %>

@@ -1,6 +1,7 @@
 //Routes pour les views EJS
 import express from "express";
-import User from "../models/userModel.js"; 
+import { getDashboard, getCatwayDetails, getCatwaysListe } from "../controllers/dashboardViewController.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -9,19 +10,17 @@ router.get("/", (req, res) => {
   res.render("home");
 });
 
-// Dashboard – page à protéger
-router.get("/dashboard", async (req, res, next) => {
-  try {
-    // récupérer tous les users
-    const users = await User.find(); 
-    // passer les users à EJS
-    res.render("dashboard", { users }); 
-  } catch (err) {
-    next(err);
-  }
-});
+// Dashboard (protégé)
+router.get("/dashboard", authMiddleware, getDashboard);
 
-// Documentation - page publique
+//Route pour afficher la liste des catways (protégée)
+router.get("/catways/list", authMiddleware, getCatwaysListe);
+
+// Route pour afficher les détails d'un catway (protégée)
+router.get("/catway/details/:id", authMiddleware, getCatwayDetails);
+
+
+// Documentation page publique
 router.get("/documentation", (req, res) => {
   res.render("documentation");
 });
