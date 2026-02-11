@@ -127,3 +127,11 @@ export const deleteUser = async (id) => {
 
   return user;
 };
+
+/**
+ * Récupère tous les utilisateurs
+ * @returns {Promise<Array>} Liste des utilisateurs
+ */
+export const getAllUsers = async () => {
+  return User.find(); 
+};

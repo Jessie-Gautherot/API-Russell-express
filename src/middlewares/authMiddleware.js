@@ -28,10 +28,7 @@ export const authMiddleware = async (req, res, next) => {
 
     // Si pas de token → créer une erreur et passer au middleware d'erreur
     if (!token) {
-      const err = new Error("Connexion impossible.");
-      err.status = 401;
-      req.currentView = "dashboard"; // page à rendre si HTML
-      throw err; // passe au errorMiddleware
+      return res.status(401).json({ message: "Connexion impossible. Token manquant." });
     }
 
     // Vérifier et décoder le token
@@ -44,8 +41,6 @@ export const authMiddleware = async (req, res, next) => {
     next();
   } catch (error) {
     // Si token invalide ou expiré
-    error.status = 401;
-    req.currentView = "dashboard"; // page à rendre si HTML
-    next(error); // passe au errorMiddleware
+    res.status(401).json({ message: "Token invalide ou expiré." });
   }
 };

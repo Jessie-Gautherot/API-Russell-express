@@ -8,7 +8,7 @@
  */
 export const errorMiddleware = (err, req, res, next) => {
   // Détecter si le client attend HTML ou JSON
-  const wantsHTML = req.headers.accept?.includes("text/html");
+  const wantsHTML = req.accepts("html") && !req.accepts("json");
   // Déterminer le code HTTP à renvoyer, par défaut 500
   const statusCode = err.status || 500;
   // Message d'erreur à envoyer
@@ -20,7 +20,9 @@ export const errorMiddleware = (err, req, res, next) => {
     const view = req.renderContext?.view || "home";
 
     return res.status(statusCode).render(view, {
-      errorMessage: message
+      errorMessage: message,
+      users: [],
+      catways: []
     });
   }
 
