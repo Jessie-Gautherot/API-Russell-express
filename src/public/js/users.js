@@ -1,4 +1,14 @@
-//le script ne s'exécute que lorsque toute la page HTML est chargée
+/**
+ * Gestion dynamique des utilisateurs côté client.
+ *
+ * Fonctionnalités :
+ * - Création d'un utilisateur
+ * - Modification d'un utilisateur
+ * - Suppression d'un utilisateur
+ * - Affichage dynamique de la liste des utilisateurs
+ *
+ * Ce module interagit avec les routes REST backend via fetch API.
+ */
 document.addEventListener("DOMContentLoaded", () => {
   //Récupération des éléments html
   const createForm = document.getElementById("create-user-form");
@@ -6,16 +16,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const updateForm = document.getElementById("update-user-form");
   const deleteSection = document.getElementById("delete-section");
   const deleteForm = document.getElementById("delete-user-form");
-  //Pour insérer les utilisateurs dans le <tbody> du tableau
   const usersTableBody = document.getElementById("users-table").querySelector("tbody");
-  //champs cachés pour stocker l’ID de l’utilisateur sélectionné dans les formulaires
   const updateHiddenId = document.getElementById("update-user-id");
   const deleteHiddenId = document.getElementById("delete-user-id");
-  //Pour afficher le nom de l'utilisateur à supprimer
   const deleteUserName = document.getElementById("delete-user-name");
 
 
-  // Récupère tous les utilisateurs
+  /**
+   * Récupère tous les utilisateurs et met à jour le tableau
+   */
   async function refreshUsersTable() {
     try {
       const res = await fetch("/users", { 
@@ -25,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
         credentials: "include"
       });
       const data = await res.json();
-      // faudrait passer au middleware???
       if (!res.ok) throw new Error(data.message || "Impossible de charger les utilisateurs");
       // On créer le tableau
       usersTableBody.innerHTML = "";

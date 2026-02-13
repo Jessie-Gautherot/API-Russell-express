@@ -22,7 +22,6 @@ router.get("/catway/details/:id", authMiddleware, getCatwayDetails);
 // Route pour afficher la liste complète des réservations (protégée)
 router.get("/reservations/list", authMiddleware, getReservationsListe);
 
-
 // Documentation page Api
 router.get("/documentationApi", getDocumentationApi);
 

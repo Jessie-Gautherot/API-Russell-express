@@ -1,8 +1,12 @@
 import {createCatway,getAllCatways,getCatwayById,updateCatway,patchCatwayState,deleteCatway} from "../services/catwayService.js";
 
 /**
- * Création d'un nouveau Catway
+ * Controller pour créer un nouveau Catway.
  * Route : POST /catways
+ *
+ * @param {import('express').Request} req - Objet requête Express contenant les données du Catway dans req.body.
+ * @param {import('express').Response} res - Objet réponse Express pour envoyer la réponse JSON.
+ * @param {import('express').NextFunction} next - Fonction pour passer au middleware d'erreur.
  */
 export const createCatwayController = async (req, res, next) => {
   try {
@@ -14,8 +18,12 @@ export const createCatwayController = async (req, res, next) => {
 };
 
 /**
- * Récupère tous les Catways
+ * Controller pour récupérer tous les Catways.
  * Route : GET /catways
+ *
+ * @param {import('express').Request} req - Objet requête Express.
+ * @param {import('express').Response} res - Objet réponse Express.
+ * @param {import('express').NextFunction} next - Fonction pour passer au middleware d'erreur.
  */
 export const getAllCatwaysController = async (req, res, next) => {
   try {
@@ -36,8 +44,12 @@ export const getAllCatwaysController = async (req, res, next) => {
 
 
 /**
- * Récupère un Catway par son ID
+ * Controller pour récupérer un Catway par son ID.
  * Route : GET /catways/:id
+ *
+ * @param {import('express').Request} req - Objet requête Express avec req.params.id.
+ * @param {import('express').Response} res - Objet réponse Express.
+ * @param {import('express').NextFunction} next - Fonction pour passer au middleware d'erreur.
  */
 export const getCatwayByIdController = async (req, res, next) => {
   try {
@@ -49,8 +61,12 @@ export const getCatwayByIdController = async (req, res, next) => {
 };
 
 /**
- * Mise à jour complète d'un Catway
+ * Controller pour mettre à jour complètement un Catway.
  * Route : PUT /catways/:id
+ *
+ * @param {import('express').Request} req - Objet requête Express avec req.params.id et req.body.
+ * @param {import('express').Response} res - Objet réponse Express.
+ * @param {import('express').NextFunction} next - Fonction pour passer au middleware d'erreur.
  */
 export const updateCatwayByIdController = async (req, res, next) => {
   try {
@@ -62,8 +78,12 @@ export const updateCatwayByIdController = async (req, res, next) => {
 };
 
 /**
- * Mise à jour partielle de l'état d'un Catway
+ * Controller pour mettre à jour partiellement l'état d'un Catway.
  * Route : PATCH /catways/:id
+ *
+ * @param {import('express').Request} req - Objet requête Express avec req.params.id et req.body.catwayState.
+ * @param {import('express').Response} res - Objet réponse Express.
+ * @param {import('express').NextFunction} next - Fonction pour passer au middleware d'erreur.
  */
 export const patchCatwayStateController = async (req, res, next) => {
   try {
@@ -76,8 +96,12 @@ export const patchCatwayStateController = async (req, res, next) => {
 };
 
 /**
- * Suppression d'un Catway
+ * Controller pour supprimer un Catway.
  * Route : DELETE /catways/:id
+ *
+ * @param {import('express').Request} req - Objet requête Express avec req.params.id.
+ * @param {import('express').Response} res - Objet réponse Express.
+ * @param {import('express').NextFunction} next - Fonction pour passer au middleware d'erreur.
  */
 export const deleteCatwayController = async (req, res, next) => {
   try {

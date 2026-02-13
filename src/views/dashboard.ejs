@@ -90,6 +90,8 @@
   </details>
 </section>
 
+
+
 <!-- GESTION DES CATWAYS -->
 <section id="catways-section">
   <h2>Gestion des Catways</h2>
@@ -123,7 +125,7 @@
     <summary>Supprimer, modifier ou voir un Catway</summary>
 
     <!-- Tableau des Catways -->
-    <table id="catways-table">
+    <table id="catways-table"table border="1">
       <thead>
         <tr>
           <th>Numéro</th>
@@ -222,13 +224,13 @@
     <summary>Créer une nouvelle réservation</summary>
     <form id="create-reservation-form">
       <div>
-  <label for="catwaySelect">Numéro du Catway :</label>
-  <select id="catwaySelect" name="catwayId" required>
+        <label for="catwayNumber">Numéro du Catway :</label>
+        <select id="catwaySelect" name="catwayId" required>
     <% catways.forEach(c => { %>
       <option value="<%= c._id %>"><%= c.catwayNumber %> - <%= c.name || '' %></option>
     <% }) %>
   </select>
-</div>
+      </div>
       <div>
         <label for="clientName">Nom du client :</label>
         <input type="text" id="clientName" name="clientName" required />

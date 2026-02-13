@@ -1,7 +1,8 @@
 import Catway from "../models/catwayModel.js";
 
 /**
- * Crée un nouveau catway (POST /catways)
+ * Crée un nouveau catway.
+ * Route : POST /catways
  *
  * @async
  * @param {Object} catwayData - Données du catway à créer
@@ -33,7 +34,8 @@ export const createCatway = async ({ catwayNumber, type, catwayState }) => {
 };
 
 /**
- * Récupère tous les catways (GET/catways)
+ * Récupère tous les catways.
+ * Route : GET /catways
  *
  * @async
  * @returns {Promise<Catway[]>} Liste de tous les catways triée par numéro
@@ -43,7 +45,8 @@ export const getAllCatways = async () => {
 };
 
 /**
- * Récupère un catway par son ID (GET /catways/:id)
+ * Récupère un catway par son ID.
+ * Route : GET /catways/:id
  *
  * @async
  * @param {string} id - ID MongoDB du catway
@@ -62,8 +65,8 @@ export const getCatwayById = async (id) => {
 };
 
 /**
- * Mise à jour complète d'un catway (PUT /catways/:id)
- * Les champs présents dans `data` remplaceront les valeurs existantes.
+ * Mise à jour complète d'un catway.
+ * Route : PUT /catways/:id
  *
  * @async
  * @param {string} id - ID MongoDB du catway à mettre à jour
@@ -108,8 +111,10 @@ export const updateCatway = async (id, data) => {
   return await catway.save();
 };
 
+
 /**
- * Met à jour uniquement l'état du catway (PATCH /catways/:id)
+ * Met à jour uniquement l'état du catway.
+ * Route : PATCH /catways/:id
  *
  * @async
  * @param {string} id - ID MongoDB du catway à mettre à jour
@@ -132,7 +137,8 @@ export const patchCatwayState = async (id, catwayState) => {
 };
 
 /**
- * Supprime un catway (DELETE /catways/:id)
+ * Supprime un catway.
+ * Route : DELETE /catways/:id
  *
  * @async
  * @param {string} id - ID MongoDB du catway à supprimer

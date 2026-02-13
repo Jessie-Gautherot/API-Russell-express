@@ -94,7 +94,9 @@ export const createReservation = async (catwayId, { clientName, boatName, checkI
 };
 
 /**
- * Récupère toutes les réservations avec le catwayId
+ * Récupère toutes les réservations avec enrichissement du catwayId.
+ *
+ * @async
  * @returns {Promise<Array>} Liste des réservations enrichies
  */
 export const getAllReservations = async () => {
@@ -121,26 +123,13 @@ export const getAllReservations = async () => {
 
 /**
  * Récupère une réservation spécifique appartenant à un catway donné.
- *
- * Route REST concernée :
- * GET /catways/:catwayId/reservations/:idReservation
- *
- * Cette méthode garantit que :
- * - Le catway existe
- * - La réservation existe
- * - La réservation appartient bien au catway
- *
- * catwayId obligatoire pour logique REST (sous-ressource).
+ * Route : GET /catways/:catwayId/reservations/:idReservation
  *
  * @async
- * @function getReservationById
  * @param {string} reservationId - ID MongoDB de la réservation
  * @param {string} catwayId - ID MongoDB du catway parent
- * @returns {Promise<import("../models/Reservation.js").default>} Réservation trouvée
- *
- * @throws {Error} 400 - Si un des IDs est invalide
- * @throws {Error} 404 - Si la réservation ou le catway n'existe pas
- * @throws {Error} 400 - Si la réservation n'appartient pas au catway
+ * @returns {Promise<Reservation>} Réservation trouvée
+ * @throws {Error} 400 si ID invalide ou appartenance incorrecte, 404 si catway ou réservation introuvable
  */
 export const getReservationById = async (reservationId, catwayId) => {
   // Vérification des ObjectId MongoDB
@@ -182,15 +171,13 @@ export const getReservationById = async (reservationId, catwayId) => {
   return reservation;
 };
 
-
-// route demandée, mais pas fonctionnalité
 /**
- * Récupère et liste toutes les réservations d’un catway spécifique via son ID 
- * (GET /catways/:catwayId/reservations)
+ * Récupère toutes les réservations d’un catway spécifique.
+ * Route : GET /catways/:catwayId/reservations
  *
  * @async
  * @param {string} catwayId - ID MongoDB du catway
- * @returns {Promise<Reservation[]>} Liste des réservations du catway, triées par date de début
+ * @returns {Promise<Reservation[]>} Liste des réservations du catway triées par date de début
  * @throws {Error} Si le catway n'existe pas
  */
 export const getReservationsByCatway = async (catwayId) => {

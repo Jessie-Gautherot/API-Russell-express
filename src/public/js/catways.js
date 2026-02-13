@@ -1,13 +1,15 @@
 /**
- * Gestion dynamique des Catways
- * Création
- * Modification de l'état d'un catway
- * Suppression d'un catway
- * Consultation des détails d'un catway
- * Affichage de la liste des catway
- * 
+ * Gestion dynamique des Catways côté client.
+ *
+ * Fonctionnalités :
+ * - Création d'un catway
+ * - Modification de l'état d'un catway
+ * - Suppression d'un catway
+ * - Consultation des détails d'un catway
+ * - Affichage de la liste des catways
+ *
+ * Ce module interagit avec les routes REST backend via fetch API.
  */
-
 document.addEventListener("DOMContentLoaded", () => {
   
   //Récupération des éléments html
@@ -17,25 +19,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const deleteSection = document.getElementById("delete-catway-section");
   const deleteForm = document.getElementById("delete-catway-form");
   const deleteNumberSpan = document.getElementById("delete-catway-number");
-
   const viewSection = document.getElementById("view-catway-section");
   const viewForm = document.getElementById("view-catway-form");
   const viewNumberSpan = document.getElementById("view-catway-number");
-
   const catwaysTableBody = document.getElementById("catways-table").querySelector("tbody");
-
   const updateHiddenId = updateForm.querySelector('input[name="id"]');
   const deleteHiddenId = deleteForm.querySelector('input[name="id"]');
   const viewHiddenId = viewForm.querySelector('input[name="id"]');
 
-  // Fonction utilitaire pour cacher toutes les sections
+  /**
+   * Cache toutes les sections de modification, suppression et consultation.
+   */
   function hideAllSections() {
     updateSection.style.display = "none";
     deleteSection.style.display = "none";
     viewSection.style.display = "none";
   }
 
-  // Récupère tous les catways
+  /**
+   * Rafraîchit le tableau des catways depuis le backend.
+   * @async
+   */
   async function refreshCatwaysTable() {
     try {
       const res = await fetch("/catways", {
@@ -127,7 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
       updateForm.querySelector("#update-catway-number").value = number;
       updateForm.querySelector("#update-catway-type").value = type;
       updateForm.querySelector("#update-catway-state").value = state;
-      updateForm.action = `/catways/${id}`; // pour method-override
       updateSection.style.display = "block";
       updateSection.scrollIntoView({ behavior: "smooth", block: "start" });
     }
@@ -136,7 +139,6 @@ document.addEventListener("DOMContentLoaded", () => {
       hideAllSections();
       deleteHiddenId.value = id;
       deleteNumberSpan.textContent = number;
-      deleteForm.action = `/catways/${id}`; // pour method-override ? c'est plus la
       deleteSection.style.display = "block";
       deleteSection.scrollIntoView({ behavior: "smooth", block: "start" });
     }

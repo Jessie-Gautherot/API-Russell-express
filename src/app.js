@@ -8,12 +8,9 @@ import viewRoutes from "./routes/viewRoutes.js"
 import { errorMiddleware } from "./middlewares/errorMiddleware.js";
 import { fileURLToPath } from "url";
 import path from "path";
-//import methodOverride from "method-override";
-
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 
 const app = express();
 
@@ -29,9 +26,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname,"views"));
 
-// Pour pouvoir utiliser PUT et DELETE via un champ _method dans le form
-//app.use(methodOverride('_method'));
-
 // Routes API
 app.use(authRoutes);
 app.use(userRoutes);
@@ -41,7 +35,7 @@ app.use(reservationRoutes);
 // Routes views EJS
 app.use(viewRoutes);
 
-// Middleware global de gestion des erreurs (TOUJOURS À LA FIN)
+// Middleware global de gestion des erreurs 
 app.use(errorMiddleware);
 
 export default app;

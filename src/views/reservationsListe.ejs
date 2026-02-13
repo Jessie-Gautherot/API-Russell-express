@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Liste des réservations</title>
-</head>
-<body>
+<%- include("partials/header") %>
   <h1>Liste complète des réservations</h1>
 
   <table border="1">
@@ -29,7 +23,6 @@
       <% }) %>
     </tbody>
   </table>
-
-  <a href="/dashboard">Retour au dashboard</a>
-</body>
-</html>
+ <br>
+  <a href="/dashboard">←Retour au dashboard</a>
+<%- include("partials/footer") %>

@@ -1,3 +1,14 @@
+/**
+ * Gestion dynamique des réservations côté client.
+ *
+ * Fonctionnalités :
+ * - Création d'une réservation
+ * - Suppression d'une réservation
+ * - Consultation des détails d'une réservation
+ * - Gestion des boutons du tableau et affichage conditionnel des sections
+ *
+ * Ce module interagit avec les routes REST backend via fetch API.
+ */
 document.addEventListener("DOMContentLoaded", () => {
   const createForm = document.getElementById("create-reservation-form");
 
@@ -23,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //Création réservation
   createForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const catwayId = createForm.catwaySelect.value; // récupère le vrai ID
+    const catwayId = createForm.catwaySelect.value;
   const data = {
     clientName: createForm.clientName.value,
     boatName: createForm.boatName.value,
@@ -44,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       alert("Réservation créée !");
       createForm.reset();
-      window.location.reload(); // recharge EJS pour afficher la nouvelle réservation
+      window.location.reload(); 
     } catch (err) {
       console.error(err);
       alert(err.message);

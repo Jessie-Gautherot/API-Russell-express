@@ -1,9 +1,8 @@
 import {createReservation, getAllReservations, getReservationById, getReservationsByCatway, deleteReservation} from "../services/reservationService.js";
 
-
 /**
- * Crée une réservation pour un catway 
- * (POST /catways/:catwayId/reservations)
+ * Crée une réservation pour un Catway.
+ * Route : POST /catways/:catwayId/reservations
  *
  * @async
  * @param {import("express").Request} req - Requête Express
@@ -11,7 +10,7 @@ import {createReservation, getAllReservations, getReservationById, getReservatio
  *   @property {Object} req.body - Données de la réservation
  * @param {import("express").Response} res - Réponse Express
  * @param {import("express").NextFunction} next - Middleware pour erreurs
- * @returns {Promise<void>} Envoie de la réservation ou du message de succès 
+ * @returns {Promise<void>} Envoie de la réservation ou du message de succès
  */
 export const createReservationController = async (req, res, next) => {
   try {
@@ -40,14 +39,14 @@ export const createReservationController = async (req, res, next) => {
 };
 
 /**
- * Récupère la liste de toutes les réservations existantes
- * (GET /reservations)
+ * Récupère la liste de toutes les réservations existantes.
+ * Route : GET /reservations
  *
  * @async
  * @param {import("express").Request} req - Requête Express
  * @param {import("express").Response} res - Réponse Express
  * @param {import("express").NextFunction} next - Middleware pour erreurs
- * @returns {Promise<void>} Envoie la liste de toutes les réservations en JSON ou HTML
+ * @returns {Promise<void>} Envoie la liste des réservations en JSON ou HTML
  */
 export const getAllReservationsController = async (req, res, next) => {
   try {
@@ -68,16 +67,13 @@ export const getAllReservationsController = async (req, res, next) => {
 };
 
 /**
- * Récupère le détail d’une réservation appartenant à un catway spécifique.
- *
- * Route :
- * GET /catways/:catwayId/reservations/:idReservation
+ * Récupère le détail d’une réservation pour un Catway spécifique.
+ * Route : GET /catways/:catwayId/reservations/:idReservation
  *
  * @async
- * @function getReservationByIdController
  * @param {import("express").Request} req - Requête Express
- *   @property {string} req.params.catwayId - ID MongoDB du catway
- *   @property {string} req.params.idReservation - ID MongoDB de la réservation
+ *   @property {string} req.params.catwayId - ID du catway
+ *   @property {string} req.params.idReservation - ID de la réservation
  * @param {import("express").Response} res - Réponse Express
  * @param {import("express").NextFunction} next - Middleware de gestion d’erreurs
  * @returns {Promise<void>}
@@ -102,17 +98,16 @@ export const getReservationByIdController = async (req, res, next) => {
   }
 };
 
-// route demandée, mais pas fonctionnalité
 /**
- * Récupère toutes les réservations d’un catway spécifique
- * (GET /catways/:catwayId/reservations)
+ * Récupère toutes les réservations d’un Catway spécifique.
+ * Route : GET /catways/:catwayId/reservations
  *
  * @async
  * @param {import("express").Request} req - Requête Express
  *   @property {string} req.params.catwayId - ID du catway
  * @param {import("express").Response} res - Réponse Express
  * @param {import("express").NextFunction} next - Middleware pour erreurs
- * @returns {Promise<void>} Envoie les réservations du catway en JSON ou HTML
+ * @returns {Promise<void>} Envoie les réservations du Catway en JSON ou HTML
  */
 export const getReservationsByCatwayController = async (req, res, next) => {
   try {

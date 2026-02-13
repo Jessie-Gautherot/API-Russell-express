@@ -2,6 +2,14 @@ import { getAllUsers } from "../services/userService.js";
 import { getAllCatways } from "../services/catwayService.js";
 import { getAllReservations} from "../services/reservationService.js";
 
+/**
+ * Controller pour afficher le dashboard.
+ * Récupère tous les utilisateurs, catways et réservations en parallèle.
+ *
+ * @param {import('express').Request} req - Objet requête Express avec req.user.
+ * @param {import('express').Response} res - Objet réponse Express.
+ * @param {import('express').NextFunction} next - Fonction pour passer au middleware d'erreur.
+ */
 export const getDashboard = async (req, res, next) => {
   try {
     // Récupérer toutes les données en parallèle
@@ -11,7 +19,6 @@ export const getDashboard = async (req, res, next) => {
       getAllReservations()
     ]);
 
-    
     res.render("dashboard", {
       user: req.user,
       users,
@@ -24,12 +31,13 @@ export const getDashboard = async (req, res, next) => {
 };
 
 
+
 /**
- * Affiche les détails d'un catway sur une page dédiée.
+ * Controller pour afficher les détails d'un Catway spécifique.
  *
- * @param {Object} req - Objet Request Express
- * @param {Object} res - Objet Response Express
- * @param {Function} next - Fonction next pour la gestion des erreurs
+ * @param {import('express').Request} req - Objet requête Express avec req.params.id et req.user.
+ * @param {import('express').Response} res - Objet réponse Express.
+ * @param {import('express').NextFunction} next - Fonction pour passer au middleware d'erreur.
  */
 export const getCatwayDetails = async (req, res, next) => {
   try {
@@ -51,11 +59,11 @@ export const getCatwayDetails = async (req, res, next) => {
 };
 
 /**
- * Affiche la liste complète des catways.
+ * Controller pour afficher la liste complète des Catways.
  *
- * @param {Object} req - Objet Request Express
- * @param {Object} res - Objet Response Express
- * @param {Function} next - Fonction next pour la gestion des erreurs
+ * @param {import('express').Request} req - Objet requête Express avec req.user.
+ * @param {import('express').Response} res - Objet réponse Express.
+ * @param {import('express').NextFunction} next - Fonction pour passer au middleware d'erreur.
  */
 export const getCatwaysListe = async (req, res, next) => {
   try {
@@ -87,8 +95,11 @@ export const getReservationsListe = async (req, res, next) => {
 };
 
 /**
- * Affiche la page de documentation API
- * GET /documentationApi
+ * Controller pour afficher la page de documentation API.
+ * Route : GET /documentationApi
+ *
+ * @param {import('express').Request} req - Objet requête Express.
+ * @param {import('express').Response} res - Objet réponse Express.
  */
 export const getDocumentationApi = (req, res) => {
   res.render("documentationApi");

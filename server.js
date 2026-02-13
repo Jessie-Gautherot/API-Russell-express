@@ -3,7 +3,7 @@ import connectToMongo from "./db/mongo.js";
 
 const PORT = process.env.PORT || 3000;
 const ENV = process.env.NODE_ENV || "default";
-const IS_TEST = process.env.MOCHA === "true"; // vrai si on lance "npm test"
+const IS_TEST = process.env.MOCHA === "true"; 
 
 const startServer = async () => {
   console.log(`Démarrage du serveur (env: ${ENV})`);

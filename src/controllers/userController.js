@@ -5,8 +5,14 @@ import { sanitizeUser } from "../utils/sanatize.js";
 const JWT_SECRET = process.env.JWT_SECRET;
 
 /**
- * Création d'un nouvel utilisateur
+ * Controller pour créer un nouvel utilisateur.
  * Route : POST /users
+ *
+ * @async
+ * @param {import("express").Request} req - Objet requête Express avec req.body
+ * @param {import("express").Response} res - Objet réponse Express
+ * @param {import("express").NextFunction} next - Middleware pour erreurs
+ * @returns {Promise<void>} Renvoie l'utilisateur créé en JSON (sanitized)
  */
 export const createUserController = async (req, res, next) => {
   try {
@@ -18,8 +24,14 @@ export const createUserController = async (req, res, next) => {
 };
 
 /**
- * Authentification utilisateur
+ * Controller pour authentifier un utilisateur.
  * Route : POST /users/login
+ *
+ * @async
+ * @param {import("express").Request} req - Objet requête Express avec req.body
+ * @param {import("express").Response} res - Objet réponse Express
+ * @param {import("express").NextFunction} next - Middleware pour erreurs
+ * @returns {Promise<void>} Redirige vers /dashboard et crée un cookie JWT
  */
 export const loginUserController = async (req, res, next) => {
   try {
@@ -39,8 +51,14 @@ export const loginUserController = async (req, res, next) => {
 };
 
 /**
- * Récupération d'un utilisateur par ID
+ * Controller pour récupérer un utilisateur par son ID.
  * Route : GET /users/:id
+ *
+ * @async
+ * @param {import("express").Request} req - Objet requête Express avec req.params.id
+ * @param {import("express").Response} res - Objet réponse Express
+ * @param {import("express").NextFunction} next - Middleware pour erreurs
+ * @returns {Promise<void>} Renvoie l'utilisateur en JSON (sanitized)
  */
 export const getUserController = async (req, res, next) => {
   try {
@@ -51,6 +69,16 @@ export const getUserController = async (req, res, next) => {
   }
 };
 
+/**
+ * Controller pour récupérer tous les utilisateurs.
+ * Route : GET /users
+ *
+ * @async
+ * @param {import("express").Request} req - Objet requête Express
+ * @param {import("express").Response} res - Objet réponse Express
+ * @param {import("express").NextFunction} next - Middleware pour erreurs
+ * @returns {Promise<void>} Renvoie la liste des utilisateurs en JSON (sanitized)
+ */
 export const getAllUsersController = async (req, res, next) => {
   try {
     const users = await getAllUsers(); // récupère tous les utilisateurs
@@ -61,8 +89,14 @@ export const getAllUsersController = async (req, res, next) => {
 };
 
 /**
- * Mise à jour d'un utilisateur
+ * Controller pour mettre à jour un utilisateur.
  * Route : PUT /users/:id
+ *
+ * @async
+ * @param {import("express").Request} req - Objet requête Express avec req.params.id et req.body
+ * @param {import("express").Response} res - Objet réponse Express
+ * @param {import("express").NextFunction} next - Middleware pour erreurs
+ * @returns {Promise<void>} Renvoie l'utilisateur mis à jour en JSON (sanitized)
  */
 export const updateUserController = async (req, res, next) => {
   try {
@@ -74,8 +108,14 @@ export const updateUserController = async (req, res, next) => {
 };
 
 /**
- * Suppression d'un utilisateur
+ * Controller pour supprimer un utilisateur.
  * Route : DELETE /users/:id
+ *
+ * @async
+ * @param {import("express").Request} req - Objet requête Express avec req.params.id
+ * @param {import("express").Response} res - Objet réponse Express
+ * @param {import("express").NextFunction} next - Middleware pour erreurs
+ * @returns {Promise<void>} Renvoie l'utilisateur supprimé en JSON (sanitized)
  */
 export const deleteUserController = async (req, res, next) => {
   try {
