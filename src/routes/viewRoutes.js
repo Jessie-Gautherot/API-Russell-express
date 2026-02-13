@@ -1,6 +1,6 @@
 //Routes pour les views EJS
 import express from "express";
-import { getDashboard, getCatwayDetails, getCatwaysListe, getReservationsListe } from "../controllers/dashboardViewController.js";
+import { getDocumentationApi, getDashboard, getCatwayDetails, getCatwaysListe, getReservationsListe } from "../controllers/dashboardViewController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
@@ -23,11 +23,7 @@ router.get("/catway/details/:id", authMiddleware, getCatwayDetails);
 router.get("/reservations/list", authMiddleware, getReservationsListe);
 
 
-
-
-// Documentation page publique
-router.get("/documentation", (req, res) => {
-  res.render("documentation");
-});
+// Documentation page Api
+router.get("/documentationApi", getDocumentationApi);
 
 export default router;

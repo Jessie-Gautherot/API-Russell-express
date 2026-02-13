@@ -1,0 +1,88 @@
+<%- include("partials/header") %>
+  <h1>Documentation</h1>
+
+  <!-- Vue d'ensemble -->
+  <section id="overview">
+    <h2>1 Vue d'ensemble</h2>
+    <p>
+      Cette API permet à la capitainerie de gérer ses comptes utilisateurs, les catways et leurs réservations.
+    </p>
+    <div>
+      <p><strong>Les principales ressources sont :</strong></p>
+      <ul>
+        <li>Les catways : Création, modification de l'état, consultation de la liste et suppression</li>
+        <li>La réservation : Création, consultation de la liste et suppression</li>
+      </ul>
+    </div>
+    <p>L'authentification est requise pour accéder à la plupart des routes.</p>
+  </section>
+
+  <!-- Tutoriel -->
+  <section id="tutorial">
+    <h2>2 Tutoriel</h2>
+    <p>Exemple d'étapes à suivre, pour utiliser l'API :</p>
+    <ol>
+      <li>Se connecter avec votre compte utilisateur</li>
+      <li>Une fois connecté, vous arriverez sur votre tableau de bord</li>
+      <li>Vous verrez alors, trois rubriques distinctes : Gestion des utilisateurs, Gestion des catways, Gestion des réservations</li>
+      <li>Chaque rubrique contient des options de travail</li>
+      <li>
+        Dans Gestion des utilisateurs :
+        <ul>
+          <li>Un formulaire vous permet de créer un nouvel utilisateur</li>
+          <li>Une liste des utilisateurs avec des boutons modifier ou supprimer vous permet de gérer les utilisateurs existants</li>
+        </ul>
+      </li>
+      <li>
+        Dans Gestion des catways :
+        <ul>
+          <li>Un formulaire vous permet de créer un nouveau catway</li>
+          <li>Une liste avec des boutons modifier, supprimer et voir détails vous permet de gérer les catways existants</li>
+          <li>Enfin, vous pouvez consulter la liste des catways existants</li>
+        </ul>
+      </li>
+      <li>
+        Gestion des réservations :
+        <ul>
+          <li>Un formulaire vous permet de créer une nouvelle réservation</li>
+          <li>Une liste avec des boutons supprimer et voir détails vous permet de gérer les réservations existantes</li>
+          <li>Enfin, vous pouvez consulter la liste des réservations existantes</li>
+        </ul>
+      </li>
+    </ol>
+  </section>
+
+  <!-- Exemple :  Créer une réservation -->
+  <section id="example-reservation">
+    <h2>3 Exemple : Créer une réservation</h2>
+    <ol>
+      <li>Cliquez sur le bouton <strong>Créer une nouvelle réservation</strong> dans la section Gestion des Réservations.</li>
+      <li>Le formulaire s'ouvre.</li>
+      <li>Choisissez le numéro du catway à réserver dans la liste déroulante.</li>
+      <li>
+        Remplissez les champs :
+        <ul>
+          <li>Nom du client</li>
+          <li>Nom du bateau</li>
+          <li>Date d'arrivée (Check-in)</li>
+          <li>Date de départ (Check-out)</li>
+        </ul>
+        <p>Les champs de date sont des calendriers, sélectionnez les dates désirées.</p>
+      </li>
+      <li>Cliquez sur <strong>Enregistrer</strong>. Si tout est correct, la réservation apparaîtra dans la liste.</li>
+    </ol>
+    <div class="tip">
+      💡 Astuce : si le catway est déjà réservé, un message d'erreur s'affichera et vous devrez choisir un autre catway ou des dates différentes.
+    </div>
+  </section>
+
+  <!-- Glossaire -->
+  <section id="glossary">
+    <h2>4 Glossaire</h2>
+    <ul>
+      <li><strong>Catway</strong> : Ponton ou passage pour amarrer un bateau</li>
+      <li><strong>Réservation</strong> : Enregistrement d'un catway donné, pour un bateau et un client</li>
+      <li><strong>Check-in / Check-out</strong> : Dates de début et de fin de la réservation</li>
+    </ul>
+  </section>
+<%- include("partials/footer") %>

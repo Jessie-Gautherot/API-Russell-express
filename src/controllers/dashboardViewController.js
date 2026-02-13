@@ -86,3 +86,10 @@ export const getReservationsListe = async (req, res, next) => {
   }
 };
 
+/**
+ * Affiche la page de documentation API
+ * GET /documentationApi
+ */
+export const getDocumentationApi = (req, res) => {
+  res.render("documentationApi");
+};
