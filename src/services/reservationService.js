@@ -94,28 +94,69 @@ export const createReservation = async (catwayId, { clientName, boatName, checkI
 };
 
 /**
- * Récupère et liste toutes les réservations existentes  
- * (GET/reservations)
- *
- * @async
- * @returns {Promise<Reservation[]>} Liste de toutes les réservations
+ * Récupère toutes les réservations avec le catwayId
+ * @returns {Promise<Array>} Liste des réservations enrichies
  */
 export const getAllReservations = async () => {
-  return await Reservation.find().sort({ checkIn: 1 });
+  // Récupérer toutes les réservations
+  const reservations = await Reservation.find().sort({ checkIn: 1 });
+
+  // Récupère tous les catways pour faire le lien avec les réservations
+  const catways = await Catway.find(); 
+
+  //"Enrichissement" : ajoute catwayId à chaque réservation
+  // On fait correspondre le catwayNumber de la réservation avec celui des catways
+  const enriched = reservations.map(r => {
+    const catway = catways.find(c => c.catwayNumber === r.catwayNumber);
+    return {
+      // les données de la réservation
+      ...r.toObject(),
+      //ajoute _id du catway correspondant
+      catwayId: catway ? catway._id : null 
+    };
+  });
+
+  return enriched;
 };
 
 /**
- * Récupère le détail d’une réservation à partir de son ID
+ * Récupère une réservation spécifique appartenant à un catway donné.
+ *
+ * Route REST concernée :
  * GET /catways/:catwayId/reservations/:idReservation
  *
+ * Cette méthode garantit que :
+ * - Le catway existe
+ * - La réservation existe
+ * - La réservation appartient bien au catway
+ *
+ * catwayId obligatoire pour logique REST (sous-ressource).
+ *
  * @async
- * @param {string} catwayId - ID MongoDB du catway
+ * @function getReservationById
  * @param {string} reservationId - ID MongoDB de la réservation
- * @returns {Promise<Reservation>} La réservation trouvée
- * @throws {Error} Si catway ou reservation n'existent pas, si ID invalide,
+ * @param {string} catwayId - ID MongoDB du catway parent
+ * @returns {Promise<import("../models/Reservation.js").default>} Réservation trouvée
+ *
+ * @throws {Error} 400 - Si un des IDs est invalide
+ * @throws {Error} 404 - Si la réservation ou le catway n'existe pas
+ * @throws {Error} 400 - Si la réservation n'appartient pas au catway
  */
-export const getReservationById = async (catwayId, reservationId) => {
-  // Vérifier que le catway existe
+export const getReservationById = async (reservationId, catwayId) => {
+  // Vérification des ObjectId MongoDB
+  if (!mongoose.Types.ObjectId.isValid(reservationId)) {
+    const err = new Error("ID de réservation invalide");
+    err.status = 400;
+    throw err;
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(catwayId)) {
+    const err = new Error("ID de catway invalide");
+    err.status = 400;
+    throw err;
+  }
+
+  // Vérifie que le catway existe
   const catway = await Catway.findById(catwayId);
   if (!catway) {
     const err = new Error("Catway introuvable");
@@ -123,14 +164,7 @@ export const getReservationById = async (catwayId, reservationId) => {
     throw err;
   }
 
-  // Vérifier que l'ID de réservation est valide
-  if (!mongoose.Types.ObjectId.isValid(reservationId)) {
-    const err = new Error("ID de réservation invalide");
-    err.status = 400;
-    throw err;
-  }
-
-  // Récupérer la réservation
+  // Vérifie que la réservation existe
   const reservation = await Reservation.findById(reservationId);
   if (!reservation) {
     const err = new Error("Réservation non trouvée");
@@ -138,10 +172,15 @@ export const getReservationById = async (catwayId, reservationId) => {
     throw err;
   }
 
+  // Vérifie l'appartenance REST (sous-ressource)
+  if (reservation.catwayNumber !== catway.catwayNumber) {
+    const err = new Error("La réservation ne correspond pas au catway");
+    err.status = 400;
+    throw err;
+  }
+
   return reservation;
 };
-
-
 
 
 // route demandée, mais pas fonctionnalité

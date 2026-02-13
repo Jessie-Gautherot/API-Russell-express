@@ -2,7 +2,6 @@ import express from "express";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { 
   createReservationController,
-  getAllReservationsController,
   getReservationByIdController,
   getReservationsByCatwayController,
   deleteReservationController
@@ -10,10 +9,8 @@ import {
 
 const router = express.Router();
 
-// --- Route globale pour la liste des réservations ---
-router.get("/reservations", authMiddleware, getAllReservationsController);
 
-// --- Routes sous-ressource catway ---
+//Routes sous-ressource catway
 router.get("/catways/:catwayId/reservations", authMiddleware, getReservationsByCatwayController);
 router.get("/catways/:catwayId/reservations/:idReservation", authMiddleware, getReservationByIdController);
 router.post("/catways/:catwayId/reservations", authMiddleware, createReservationController);

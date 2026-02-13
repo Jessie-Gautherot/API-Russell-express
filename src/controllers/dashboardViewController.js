@@ -1,36 +1,28 @@
-// Import des services 
 import { getAllUsers } from "../services/userService.js";
-import { getAllCatways, getCatwayById } from "../services/catwayService.js";
-import { getAllReservations } from "../services/reservationService.js";
+import { getAllCatways } from "../services/catwayService.js";
+import { getAllReservations} from "../services/reservationService.js";
 
-/**
- * Contrôleur de vue du dashboard utilisateur.
- *
- * Récupére les données nécessaires à l'affichage du dashboard
- * Passe ces données à EJS
- *
- * @param {Object} req - Objet Request Express
- * @param {Object} res - Objet Response Express
- * @param {Function} next - Fonction next pour la gestion des erreurs
- */
 export const getDashboard = async (req, res, next) => {
   try {
+    // Récupérer toutes les données en parallèle
     const [users, catways, reservations] = await Promise.all([
       getAllUsers(),
       getAllCatways(),
       getAllReservations()
     ]);
-    // Rendu de la vue EJS "dashboard"
+
+    
     res.render("dashboard", {
-      user: req.user,   
+      user: req.user,
       users,
       catways,
-      reservations
+      reservations,
     });
   } catch (error) {
     next(error);
   }
 };
+
 
 /**
  * Affiche les détails d'un catway sur une page dédiée.
@@ -75,5 +67,22 @@ export const getCatwaysListe = async (req, res, next) => {
   }
 };
 
-
+/**
+ * Récupère toutes les réservations et les affiche dans la page EJS `reservationsListe`.
+ * 
+ * Route : GET /reservations/list
+ * Middleware : authMiddleware (protégé)
+ * 
+ * @param {import("express").Request} req - L'objet requête Express
+ * @param {import("express").Response} res - L'objet réponse Express
+ * @returns {void} - Rend la vue EJS avec la liste des réservations ou renvoie une erreur 500
+ */
+export const getReservationsListe = async (req, res, next) => {
+  try {
+    const reservations = await getAllReservations();
+    res.render("reservationsListe", { reservations });
+  } catch (err) {
+    next(err);
+  }
+};
 

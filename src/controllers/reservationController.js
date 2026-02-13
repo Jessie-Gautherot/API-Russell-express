@@ -68,34 +68,36 @@ export const getAllReservationsController = async (req, res, next) => {
 };
 
 /**
- * Récupère le détail d’une réservation à partir de son ID
- * (GET /catways/:catwayId/reservations/:idReservation)
+ * Récupère le détail d’une réservation appartenant à un catway spécifique.
+ *
+ * Route :
+ * GET /catways/:catwayId/reservations/:idReservation
  *
  * @async
+ * @function getReservationByIdController
  * @param {import("express").Request} req - Requête Express
- *   @property {string} req.params.catwayId - ID du catway
- *   @property {string} req.params.idReservation - ID de la réservation
+ *   @property {string} req.params.catwayId - ID MongoDB du catway
+ *   @property {string} req.params.idReservation - ID MongoDB de la réservation
  * @param {import("express").Response} res - Réponse Express
- * @param {import("express").NextFunction} next - Middleware pour erreurs
- * @returns {Promise<void>} Envoie la réservation demandée en JSON ou HTML
+ * @param {import("express").NextFunction} next - Middleware de gestion d’erreurs
+ * @returns {Promise<void>}
  */
 export const getReservationByIdController = async (req, res, next) => {
   try {
     const { catwayId, idReservation } = req.params;
 
-    // Appelle le service correspondant
-    const reservation = await getReservationById(catwayId, idReservation);
+    // Toujours passer catwayId au service
+    const reservation = await getReservationById(
+      idReservation,
+      catwayId
+    );
 
-    // succès JSON pour tests automatisés
-    if (req.accepts("json")) {
-      return res.json({ reservation });
-    }
+    // Réponse HTML (EJS)
+    res.render("reservationDetails", { reservation });
 
-    // succès HTML, rendu EJS pour l'utilisateur final
-    res.render("dashboard", { reservation });
   } catch (error) {
-    // Si erreur : déléguer au middleware et indiquer la vue HTML
-    req.renderContext = { view: "dashboard" };
+    // Permet au middleware d’erreur de savoir quelle vue afficher
+    req.renderContext = { view: "reservationDetails" };
     next(error);
   }
 };

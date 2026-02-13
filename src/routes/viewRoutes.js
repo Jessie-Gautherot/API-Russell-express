@@ -1,6 +1,6 @@
 //Routes pour les views EJS
 import express from "express";
-import { getDashboard, getCatwayDetails, getCatwaysListe } from "../controllers/dashboardViewController.js";
+import { getDashboard, getCatwayDetails, getCatwaysListe, getReservationsListe } from "../controllers/dashboardViewController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
@@ -18,6 +18,11 @@ router.get("/catways/list", authMiddleware, getCatwaysListe);
 
 // Route pour afficher les détails d'un catway (protégée)
 router.get("/catway/details/:id", authMiddleware, getCatwayDetails);
+
+// Route pour afficher la liste complète des réservations (protégée)
+router.get("/reservations/list", authMiddleware, getReservationsListe);
+
+
 
 
 // Documentation page publique

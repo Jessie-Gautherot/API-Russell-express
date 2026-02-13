@@ -1,7 +1,7 @@
 <%- include("partials/header") %>
 
 <h1>Bienvenue sur le Dashboard</h1>
-
+<!-- GESTION UTILISATEURS -->
 <section id="users-section">
   <h2>Gestion des utilisateurs</h2>
 
@@ -94,7 +94,7 @@
 <section id="catways-section">
   <h2>Gestion des Catways</h2>
 
-  <!-- FORMULAIRE CREATION CATWAY -->
+  <!-- Formulaire de création d'un catway -->
   <details>
     <summary>Créer un nouveau Catway</summary>
     <form id="create-catway-form">
@@ -118,7 +118,7 @@
     </form>
   </details>
 
-  <!-- TABLEAU + FORMULAIRES DYNAMIQUES -->
+  <!-- tableau dynamique -->
   <details>
     <summary>Supprimer, modifier ou voir un Catway</summary>
 
@@ -180,7 +180,7 @@
       </form>
     </section>
 
-    <!-- FORMULAIRE SUPPRESSION (caché par défaut) -->
+    <!-- Formulaire supression d'un catway par son ID (caché par défaut) -->
     <section id="delete-catway-section" style="display:none; margin-top:20px; padding:15px; background:#ffe6e6; border:1px solid #f7a29c; border-radius:8px;">
       <h3>Supprimer un Catway</h3>
       <form id="delete-catway-form">
@@ -191,7 +191,7 @@
       </form>
     </section>
 
-    <!-- FORMULAIRE DETAILS (caché par défaut) -->
+    <!-- Formulaire pour voir details d'un catway par son ID (caché par défaut) -->
     <section id="view-catway-section" style="display:none; margin-top:20px; padding:15px; background:#f0f8ff; border-radius:8px;">
       <h3>Détails du Catway</h3>
       <form id="view-catway-form">
@@ -204,7 +204,7 @@
 
   </details>
 
-  <!-- Lien vers la liste complète -->
+  <!-- Lien vers la liste complète des catways -->
   <details>
     <summary>Consulter la liste complète des Catways</summary>
     <p><a href="/catways">Cliquer ici pour voir tous les Catways</a></p>
@@ -213,12 +213,122 @@
 
 
 
-
-<!-- GESTION RESERVATION-->
+<!-- GESTION DES RESERVATIONS -->
 <section id="reservation-section">
   <h2>Gestion des réservations</h2>
 
-  <script src="/js/users.js"></script>
-  <script src="/js/catways.js"></script>
+  <!-- Formulaire création réservation -->
+  <details>
+    <summary>Créer une nouvelle réservation</summary>
+    <form id="create-reservation-form">
+      <div>
+  <label for="catwaySelect">Numéro du Catway :</label>
+  <select id="catwaySelect" name="catwayId" required>
+    <% catways.forEach(c => { %>
+      <option value="<%= c._id %>"><%= c.catwayNumber %> - <%= c.name || '' %></option>
+    <% }) %>
+  </select>
+</div>
+      <div>
+        <label for="clientName">Nom du client :</label>
+        <input type="text" id="clientName" name="clientName" required />
+      </div>
+      <div>
+        <label for="boatName">Nom du bateau :</label>
+        <input type="text" id="boatName" name="boatName" required />
+      </div>
+      <div>
+        <label for="checkIn">Check-in :</label>
+        <input type="date" id="checkIn" name="checkIn" required />
+      </div>
+      <div>
+        <label for="checkOut">Check-out :</label>
+        <input type="date" id="checkOut" name="checkOut" required />
+      </div>
+      <button type="submit">Créer</button>
+    </form>
+  </details>
 
-<%- include("partials/footer") %>
+  <!-- Tableau des réservations -->
+  <details>
+    <summary>Supprimer ou voir détails d'une réservation</summary>
+    <table id="reservations-table">
+      <thead>
+        <tr>
+          <th>Catway</th>
+          <th>Client</th>
+          <th>Bateau</th>
+          <th>Check-in</th>
+          <th>Check-out</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% reservations.forEach(r => { %>
+          <tr>
+            <td><%= r.catwayNumber %></td>
+            <td><%= r.clientName %></td>
+            <td><%= r.boatName %></td>
+            <td><%= r.checkIn.toISOString().slice(0,10) %></td>
+            <td><%= r.checkOut.toISOString().slice(0,10) %></td>
+            <td>
+              <button type="button" 
+                      class="delete-reservation-btn" 
+                      data-id="<%= r._id %>" 
+                      data-catway="<%= r.catwayId %>" 
+                      data-client="<%= r.clientName %>">
+                Supprimer
+              </button>
+              <button type="button" 
+                      class="details-reservation-btn" 
+                      data-id="<%= r._id %>" 
+                      data-catway="<%= r.catwayId %>" 
+                      data-client="<%= r.clientName %>">
+                Voir détails
+              </button>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <!-- Formulaire suppression réservation -->
+    <section id="delete-reservation-section" style="display:none; margin-top:20px; padding:15px; background:#ffe6e6; border:1px solid #f7a29c; border-radius:8px;">
+      <h3>Supprimer une réservation</h3>
+      <form id="delete-reservation-form">
+        <input type="hidden" id="delete-reservation-id" name="id" />
+        <input type="hidden" id="delete-reservation-catway" name="catwayId" />
+        <p>Confirmer la suppression de la réservation du client : <strong id="delete-reservation-client"></strong></p>
+        <button type="submit">Supprimer</button>
+        <button type="button" class="cancel-reservation-btn">Annuler</button>
+      </form>
+    </section>
+
+    <!-- Formulaire voir détails réservation -->
+    <section id="view-reservation-section" style="display:none; margin-top:20px; padding:15px; background:#f0f8ff; border-radius:8px;">
+      <h3>Détails de la réservation</h3>
+      <form id="view-reservation-form">
+        <input type="hidden" id="view-reservation-id" name="id" />
+        <input type="hidden" id="view-reservation-catway" name="catwayId" />
+        <p>Client : <strong id="view-reservation-client"></strong></p>
+        <button type="submit">Consulter la page de la réservation</button>
+        <button type="button" class="cancel-reservation-btn">Annuler</button>
+      </form>
+    </section>
+
+  </details>
+
+  <!-- Lien vers liste complète des réservations -->
+  <details>
+    <summary>Voir la liste des réservations</summary>
+    <p><a href="/reservations/list">Liste complète des Réservations</a></p>
+  </details>
+</section>
+
+
+
+<script src="/js/users.js"></script>
+<script src="/js/catways.js"></script>
+<script src="/js/reservation.js"></script>
+
+ <%- include("partials/footer") %>
