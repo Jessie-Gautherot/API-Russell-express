@@ -4,7 +4,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "env-cmd -f ./env/.env nodemon server.js",
+    "start": "env-cmd -f ./env/.env.prod node server.js",
     "dev": "env-cmd -f ./env/.env.dev nodemon server.js",
     "prod": "env-cmd -f ./env/.env.prod node server.js",
     "test": "cross-env MOCHA=true env-cmd -f ./env/.env.dev mocha --exit",
