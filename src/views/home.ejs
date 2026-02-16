@@ -1,0 +1,16 @@
+<%- include("partials/header") %>
+      <!-- présentaion -->
+      <h2>Bienvenue ! Gérez vos catways et réservations facilement grâce à notre API privée.</h2>
+    <section class="login-form">
+       <!-- Authentification-->
+      <h3>Connexion</h3>
+      <form action="/users/login" method="POST">
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="password" name="password" placeholder="Mot de passe" required />
+        <button type="submit">Se connecter</button>
+      </form>
+      <br>
+       <!-- Lien vers la documentation -->
+      <a href="/documentationApi">Voir la documentation API</a>
+    </section>
+  <%- include("partials/footer") %>

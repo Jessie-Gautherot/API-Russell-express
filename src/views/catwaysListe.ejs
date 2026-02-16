@@ -1,0 +1,30 @@
+<%- include("partials/header") %>
+
+<h1>Liste complète des Catways</h1>
+
+<section>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Numéro</th>
+        <th>Type</th>
+        <th>État</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% catways.forEach(catway => { %>
+        <tr>
+          <td><%= catway.catwayNumber %></td>
+          <td><%= catway.type %></td>
+          <td><%= catway.catwayState %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</section>
+
+<p style="margin-top:20px;">
+  <a href="/dashboard">← Retour au dashboard</a>
+</p>
+
+<%- include("partials/footer") %>

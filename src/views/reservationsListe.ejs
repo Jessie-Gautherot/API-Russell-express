@@ -1,0 +1,28 @@
+<%- include("partials/header") %>
+  <h1>Liste complète des réservations</h1>
+
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Catway</th>
+        <th>Client</th>
+        <th>Bateau</th>
+        <th>Check-in</th>
+        <th>Check-out</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% reservations.forEach(r => { %>
+        <tr>
+          <td><%= r.catwayNumber %></td>
+          <td><%= r.clientName %></td>
+          <td><%= r.boatName %></td>
+          <td><%= r.checkIn.toISOString().slice(0,10) %></td>
+          <td><%= r.checkOut.toISOString().slice(0,10) %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+ <br>
+  <a href="/dashboard">←Retour au dashboard</a>
+<%- include("partials/footer") %>

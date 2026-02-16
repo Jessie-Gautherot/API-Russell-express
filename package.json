@@ -1,0 +1,37 @@
+{
+  "name": "api-russell-express",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "env-cmd -f ./env/.env.prod node server.js",
+    "dev": "env-cmd -f ./env/.env.dev nodemon server.js",
+    "prod": "env-cmd -f ./env/.env.prod node server.js",
+    "test": "cross-env MOCHA=true env-cmd -f ./env/.env.dev mocha --exit",
+    "doc": "jsdoc -c jsdoc.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "ejs": "^4.0.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "method-override": "^3.0.0",
+    "mongoose": "^9.1.2"
+  },
+  "devDependencies": {
+    "chai": "^6.2.2",
+    "chai-http": "^5.1.2",
+    "cross-env": "^10.1.0",
+    "env-cmd": "^11.0.0",
+    "jsdoc": "^4.0.5",
+    "mocha": "^11.7.5",
+    "nodemon": "^3.1.11",
+    "supertest": "^7.2.2"
+  }
+}

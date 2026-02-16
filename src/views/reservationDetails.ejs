@@ -1,0 +1,15 @@
+<%- include("partials/header") %>
+
+<h1>Détails de la réservation</h1>
+
+<ul>
+  <li>Catway : <%= reservation.catwayNumber %></li>
+  <li>Client : <%= reservation.clientName %></li>
+  <li>Bateau : <%= reservation.boatName %></li>
+  <li>Check-in : <%= reservation.checkIn.toISOString().slice(0,10) %></li>
+  <li>Check-out : <%= reservation.checkOut.toISOString().slice(0,10) %></li>
+</ul>
+
+<a href="/dashboard">←Retour au dashboard</a>
+
+<%- include("partials/footer") %>
