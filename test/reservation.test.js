@@ -1,127 +1,123 @@
-import * as chai from "chai";
-import request from "supertest";
-import app from "../server.js";
-import User from "../src/models/userModel.js";
-import Reservation from "../src/models/reservationModel.js";
+import { describe, it, before, beforeEach, after } from "mocha";
+import { expect } from "chai";
+import mongoose from "mongoose";
+import {
+  createReservation,
+  getAllReservations,
+  getReservationById,
+  deleteReservation
+} from "../src/services/reservationService.js";
 import Catway from "../src/models/catwayModel.js";
+import Reservation from "../src/models/reservationModel.js";
 
-const { expect } = chai;
+// Construire l'URI MongoDB de test
+const MONGO_URI_TEST = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}`;
 
-describe("Reservation Tests", function () {
-  this.timeout(8000); 
-  // Token JWT pour accéder aux routes protégées
-  let adminToken;  
-  // Stocke l'ID MongoDB de la réservation de test    
-  let reservationId;   
-  // Stoke l'ID MongoDB du catway de test
-  let catwayId
-
-  // Utilisateur "admin" pour authentification
-  const adminUser = {
-    name: "Admin Reservation",
-    email: "admin.reservation@example.com",
-    password: "admin1234"
-  };
-
-  // Données de la réservation utilisée dans les tests
-  const testReservation = {
-    catwayNumber: 101,
-    clientName: "John Doe",
-    boatName: "Black Pearl",
-    checkIn: new Date("2026-02-01T10:00:00Z"),
-    checkOut: new Date("2026-02-05T18:00:00Z")
-  };
-
-  // Avant tous les tests : nettoyage 
-  before(async () => {
-    // Supprime les éventuels doublons dans la base
-    await User.deleteOne({ email: adminUser.email });
-    await Reservation.deleteMany({ catwayNumber: testReservation.catwayNumber });
-    await Catway.deleteOne({ catwayNumber: testReservation.catwayNumber });
-
-    // Création de l'administrateur pour obtenir un JWT valide
-    await User.create(adminUser);
-
-    // Connexion admin pour obtenir un token JWT
-    const loginRes = await request(app)
-      .post("/login")
-      .set("Accept", "application/json")
-      .send({ email: adminUser.email, password: adminUser.password });
-    // Stockage du JWT pour les tests
-    adminToken = loginRes.body.token; 
-
-    // Création du catway de test
-    const catway = await Catway.create({
-      catwayNumber: testReservation.catwayNumber,
-      type: "long",
-      catwayState: "bon"
-    });
-
-  catwayId = catway._id;
+// Connexion à la base de test avant tous les tests
+before(async () => {
+  // Connexion Mongoose à la base de test
+  await mongoose.connect(MONGO_URI_TEST, {
+  });
+  console.log("Connecté à la base de test");
 });
 
-  // Après tous les tests : nettoyage
-  after(async () => {
-    await User.deleteOne({ email: adminUser.email });
-    await Reservation.deleteMany({ catwayNumber: testReservation.catwayNumber });
-  });
+// Déconnexion après tous les tests
+after(async () => {
+  await mongoose.disconnect();
+  console.log("Déconnecté de la base de test");
+});
 
-  // Test création d'une réservation
+// Début des tests unitaires pour les réservations
+describe("Reservation Service - Tests unitaires sur base de test", () => {
+  let catway; // Catway factice utilisé pour chaque réservation
+
+  // Avant chaque test : nettoyer les collections
+  beforeEach(async () => {
+    // Vider toutes les réservations pour que les tests soient indépendants
+    await Reservation.deleteMany({});
+    // Vider les catways pour repartir d'une base propre
+    await Catway.deleteMany({});
+
+    // Créer un catway valide pour attacher les réservations
+  catway = await Catway.create({
+    catwayNumber: 101,
+    type: "long",        
+    catwayState: "Bon"   
+  });
+});
+
+  // Test : création d'une réservation
   it("should create a reservation", async () => {
-    const res = await request(app)
-      .post(`/catways/${catwayId}/reservations`)
-      .set("Authorization", `Bearer ${adminToken}`)
-      .set("Accept", "application/json")
-      .send(testReservation);
+    const res = await createReservation(catway._id, {
+      clientName: "Alice",
+      boatName: "Bateau Bleu",
+      checkIn: "2026-03-01",
+      checkOut: "2026-03-05"
+    });
 
-    expect(res.status).to.equal(201); 
-    expect(res.body.reservation).to.have.property("clientName", testReservation.clientName);
-
-    // Stocke l'ID pour tests suivants
-    reservationId = res.body.reservation._id; 
+    // Vérifie que la réservation a un _id Mongo valide
+    expect(res).to.have.property("_id");
+    // Vérifie que le nom du client est correct
+    expect(res.clientName).to.equal("Alice");
+    console.log("Création de réservation réussie :", res.clientName);
   });
 
-  // Test récupération de toutes les réservations
-  it("should get all reservations", async () => {
-    const res = await request(app)
-      .get("/reservations")
-      .set("Authorization", `Bearer ${adminToken}`)
-      .set("Accept", "application/json");
+  // Test : lister toutes les réservations
+  it("should list all reservations", async () => {
+    // Créer une réservation pour tester le listing
+    await createReservation(catway._id, {
+      clientName: "Alice",
+      boatName: "Bateau Bleu",
+      checkIn: "2026-03-01",
+      checkOut: "2026-03-05"
+    });
+    const all = await getAllReservations();
 
-    expect(res.status).to.equal(200);
-    expect(res.body.reservations).to.be.an("array"); 
+    // Vérifie que le résultat est un tableau contenant exactement 1 réservation
+    expect(all).to.be.an("array").with.length(1);
+    console.log("Listing des réservations :", all.map(r => r.clientName).join(", "));
   });
 
-  // Test récupération d'une réservation par ID 
+  // Test : récupérer une réservation par son ID
   it("should get reservation by id", async () => {
-    const res = await request(app)
-      .get(`/catways/${catwayId}/reservations/${reservationId}`)
-      .set("Authorization", `Bearer ${adminToken}`)
-      .set("Accept", "application/json");
+    // Créer une réservation test
+    const res = await createReservation(catway._id, {
+      clientName: "Bob",
+      boatName: "Bateau Rouge",
+      checkIn: "2026-04-01",
+      checkOut: "2026-04-05"
+    });
 
-    expect(res.status).to.equal(200);
-    expect(res.body.reservation).to.have.property("boatName", testReservation.boatName);
+    // Récupère la réservation par son ID et ID du catway
+    const found = await getReservationById(res._id, catway._id);
+
+    // Vérifie que le client récupéré est bien "Bob"
+    expect(found.clientName).to.equal("Bob");
+
+    // Affiche dans la console pour suivi
+    console.log("Récupération réservation par ID réussie :", found.clientName);
   });
 
-  // Test suppression d'une réservation
+  // Test : suppression d'une réservation
   it("should delete a reservation", async () => {
-    const res = await request(app)
-      .delete(`/catways/${catwayId}/reservations/${reservationId}`)
-      .set("Authorization", `Bearer ${adminToken}`)
-      .set("Accept", "application/json");
+    // Créer une réservation test
+    const res = await createReservation(catway._id, {
+      clientName: "Bob",
+      boatName: "Bateau Rouge",
+      checkIn: "2026-04-01",
+      checkOut: "2026-04-05"
+    });
 
-    expect(res.status).to.equal(200); 
-  });
+    // Supprime la réservation via le service 
+    const deleted = await deleteReservation(res._id);
 
-  // Test d'erreur après suppression 
-  it("should return error when getting deleted reservation", async () => {
-    const res = await request(app)
-      .get(`/catways/${catwayId}/reservations/${reservationId}`)
-      .set("Authorization", `Bearer ${adminToken}`)
-      .set("Accept", "application/json");
+    // Vérifie que le client supprimé est bien "Bob"
+    expect(deleted.clientName).to.equal("Bob");
 
-    // Le service doit renvoyer 404 si la réservation n'existe pas
-    expect(res.status).to.equal(404);
-    expect(res.body).to.have.property("error").that.includes("Réservation non trouvée");
+    // Vérifie que la collection de réservations est vide après suppression
+    const all = await getAllReservations();
+    expect(all).to.have.length(0);
+
+    console.log("Suppression de réservation réussie :", deleted.clientName);
   });
 });

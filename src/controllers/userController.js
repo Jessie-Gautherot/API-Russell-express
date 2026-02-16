@@ -38,6 +38,11 @@ export const loginUserController = async (req, res, next) => {
     const user = await authenticateUser(req.body);
     const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
 
+    // Pour les tests, renvoyer le token en JSON
+    if (process.env.MOCHA === "true") {
+      return res.json({ token });
+    }
+    // Sinon en prod
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

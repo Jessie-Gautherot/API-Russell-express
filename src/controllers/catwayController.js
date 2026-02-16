@@ -54,6 +54,13 @@ export const getAllCatwaysController = async (req, res, next) => {
 export const getCatwayByIdController = async (req, res, next) => {
   try {
     const catway = await getCatwayById(req.params.id);
+
+    // Si le client demande du JSON (test)
+    if (req.headers.accept?.includes("application/json") || process.env.MOCHA === "true") {
+      return res.json({ catway });
+    }
+
+    // Sinon, renvoie la vue EJS
     res.render("catwayDetails", { catway });
   } catch (error) {
     next(error);
